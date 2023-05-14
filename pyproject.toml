@@ -7,7 +7,14 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+bs4 = "^0.0.1"
+requests = "^2.30.0"
+twilio = "^8.2.0"
+python-dotenv = "^1.0.0"
 
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.3.1"
 
 [build-system]
 requires = ["poetry-core"]
