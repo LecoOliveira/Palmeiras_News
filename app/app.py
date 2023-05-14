@@ -1,13 +1,14 @@
 from datetime import datetime
 from twilio.rest import Client
-from functions import *
+from functions import texto_msg, data_jogo
 from dotenv import load_dotenv
 import os
 
 
 # Credenciais da conta Twilio, armazenadas em uma variável de ambiente.
 # Para mais informações: https://www.twilio.com/docs/usage/secure-credentials
-load_dotenv()
+#                        https://www.twilio.com/blog/environment-variables-python
+load_dotenv('/home/alex/Documentos/Estudos/Palmeiras_News/app/twilio.env')
 account_sid = os.environ['TWILIO_ACCOUNT_SID']
 auth_token = os.environ['TWILIO_AUTH_TOKEN']
 phone_number = os.environ['TWILIO_PHONE_NUMBER']

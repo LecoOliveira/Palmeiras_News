@@ -14,7 +14,7 @@ headers = {
 
 
 # Encontra a data do próximo jogo.
-def data_jogo() -> str:
+def data_jogo():
 
     html_principal = bs(
         (get(url_principal, headers=headers)).content, 'html.parser')
@@ -26,7 +26,7 @@ def data_jogo() -> str:
 
 
 # Encontra o texto da mensagem.
-def texto_msg() -> str:
+def texto_msg():
 
     html_principal = bs(
         (get(url_principal, headers=headers)).content, 'html.parser')
