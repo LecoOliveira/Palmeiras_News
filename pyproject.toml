@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "palmeiras-news"
+version = "0.1.0"
+description = "Web Scraping que pega informações do proximo jogo do Palmeiras no site oficial, e envia pos SMS."
+authors = ["LecoOliveira <lecoverde10@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
