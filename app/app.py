@@ -21,11 +21,11 @@ data_hoje = datetime.today().strftime('%d/%m')
 
 def enviar_msg():
     return client.messages.create(
-        body=texto_msg(),
-        from_=phone_number,
-        to='+5511940228960'
+        body=texto_msg(), from_=phone_number, to='+5511940228960'
     )
 
 
-if data_hoje == data_jogo() or (int(data_hoje[:2]) + 1) == int(data_jogo()[:2]):
+if data_hoje == data_jogo() or (int(data_hoje[:2]) + 1) == int(
+    data_jogo()[:2]
+):
     enviar_msg()
