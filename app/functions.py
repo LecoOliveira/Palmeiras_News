@@ -1,7 +1,7 @@
-from bs4 import BeautifulSoup as bs
-from requests import get
 from re import compile
 
+from bs4 import BeautifulSoup as bs
+from requests import get
 
 url_principal = 'https://www.palmeiras.com.br/home/'
 

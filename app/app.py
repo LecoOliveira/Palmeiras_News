@@ -1,9 +1,9 @@
-from datetime import datetime
-from twilio.rest import Client
-from functions import texto_msg, data_jogo
-from dotenv import load_dotenv
 import os
+from datetime import datetime
 
+from dotenv import load_dotenv
+from functions import data_jogo, texto_msg
+from twilio.rest import Client
 
 # Credenciais da conta Twilio, armazenadas em uma variável de ambiente.
 # Para mais informações: https://www.twilio.com/docs/usage/secure-credentials
