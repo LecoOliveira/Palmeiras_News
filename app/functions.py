@@ -14,7 +14,7 @@ headers = {
 
 
 # Encontra a data do próximo jogo.
-def data_jogo():
+def data_jogo() -> str:
 
     html_principal = bs(
         (get(url_principal, headers=headers)).content, 'html.parser')
@@ -26,7 +26,7 @@ def data_jogo():
 
 
 # Encontra o texto da mensagem.
-def texto_msg():
+def texto_msg() -> str:
 
     html_principal = bs(
         (get(url_principal, headers=headers)).content, 'html.parser')
@@ -36,4 +36,9 @@ def texto_msg():
 
     html_jogo = bs((get(link_jogo, headers=headers)).content, 'html.parser')
 
-    return html_jogo.find('div', {'class': 'pretexto'}).find('p').find('p').text
+    texto_final = html_jogo.find('div', {'class': 'pretexto'}).text.strip('\n')
+
+    if texto_final == 'Não há relatos sobre este jogo.':
+        return texto_final
+    else:
+        return html_jogo.find('div', {'class': 'pretexto'}).find('p').find('p').text
