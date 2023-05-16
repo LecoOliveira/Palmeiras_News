@@ -1,6 +1,6 @@
 import re
 
-from app.functions import *
+from functions import *
 
 my_regex = re.compile('../..')
 
