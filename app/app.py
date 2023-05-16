@@ -12,6 +12,7 @@ load_dotenv('/home/alex/Documentos/Estudos/Palmeiras_News/app/twilio.env')
 account_sid = os.environ['TWILIO_ACCOUNT_SID']
 auth_token = os.environ['TWILIO_AUTH_TOKEN']
 phone_number = os.environ['TWILIO_PHONE_NUMBER']
+destiny_phone_number = os.environ['TWILIO_DESTINY_PHONE_NUMBER']
 client = Client(account_sid, auth_token)
 
 
@@ -22,7 +23,7 @@ data_hoje = datetime.today().strftime('%d/%m')
 def enviar_msg():
     if texto_msg() != 'Não há relatos sobre este jogo.':
         return client.messages.create(
-            body=texto_msg(), from_=phone_number, to='+5511940228960'
+            body=texto_msg(), from_=phone_number, to=destiny_phone_number
         )
 
 
