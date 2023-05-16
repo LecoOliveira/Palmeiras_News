@@ -1,1 +1,36 @@
 site_name: Palmeiras news
+
+repo_url: https://github.com/LecoOliveira/Palmeiras_News
+repo_name: LecoOliveira/Palmeiras_News
+edit_uri: /tree/main/docs
+
+theme:
+    palette:
+      scheme: default
+      primary: teal
+      accent: teal
+      
+    features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.path
+    name: material
+    language : pt-BR
+    logo: ./assets/escudo-palmeiras-6.png
+    favicon: ./assets/palmeiras2.png
+
+markdown_extensions:
+    - attr_list
+  
+extra_css:
+    - stylesheet/extra.css
+
+extra:
+    social:
+        - icon: fontawesome/brands/linkedin
+          link: https://www.linkedin.com/in/alex-rocha-23119411b/
+        - icon: fontawesome/brands/github
+          link: https://github.com/LecoOliveira
+        - icon: fontawesome/solid/paper-plane
+          link: mailto:lecoverde10@gmail.com
+    generator: false
