@@ -20,9 +20,10 @@ data_hoje = datetime.today().strftime('%d/%m')
 
 
 def enviar_msg():
-    return client.messages.create(
-        body=texto_msg(), from_=phone_number, to='+5511940228960'
-    )
+    if texto_msg() != 'Não há relatos sobre este jogo.':
+        return client.messages.create(
+            body=texto_msg(), from_=phone_number, to='+5511940228960'
+        )
 
 
 if data_hoje == data_jogo() or (int(data_hoje[:2]) + 1) == int(
