@@ -20,7 +20,7 @@ client = Client(account_sid, auth_token)
 data_hoje = datetime.today().strftime('%d/%m')
 
 
-def enviar_msg():
+def enviar_msg() -> str:
     if texto_msg() != 'Não há relatos sobre este jogo.':
         return client.messages.create(
             body=texto_msg(), from_=phone_number, to=destiny_phone_number

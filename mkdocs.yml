@@ -34,3 +34,9 @@ extra:
         - icon: fontawesome/solid/paper-plane
           link: mailto:lecoverde10@gmail.com
     generator: false
+
+plugins:
+    - mkdocstrings:
+        handlers:
+          python:
+            paths: [app]
