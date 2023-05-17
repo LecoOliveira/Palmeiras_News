@@ -21,13 +21,20 @@ data_hoje = datetime.today().strftime('%d/%m')
 
 
 def enviar_msg() -> str:
+    """Envia a mensagem para o destino definido em 'destiny_phone_number'
+
+    Returns:
+        str: Mensagem de confirmação ou de erro.
+    """
+
     if texto_msg() != 'Não há relatos sobre este jogo.':
         return client.messages.create(
             body=texto_msg(), from_=phone_number, to=destiny_phone_number
         )
 
 
-if data_hoje == data_jogo() or (int(data_hoje[:2]) + 1) == int(
-    data_jogo()[:2]
-):
-    enviar_msg()
+# if data_hoje == data_jogo() or (int(data_hoje[:2]) + 1) == int(
+#     data_jogo()[:2]
+# ):
+#     enviar_msg()
+# print(texto_msg())
