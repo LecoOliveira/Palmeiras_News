@@ -9,14 +9,14 @@ from twilio.rest import Client
 # Para mais informações: https://www.twilio.com/docs/usage/secure-credentials
 #                        https://www.twilio.com/blog/environment-variables-python
 load_dotenv('/home/alex/Documentos/Estudos/Palmeiras_News/app/twilio.env')
-account_sid = os.environ['TWILIO_ACCOUNT_SID']
-auth_token = os.environ['TWILIO_AUTH_TOKEN']
-phone_number = os.environ['TWILIO_PHONE_NUMBER']
-destiny_phone_number = os.environ['TWILIO_DESTINY_PHONE_NUMBER']
-client = Client(account_sid, auth_token)
+ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
+AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
+PHONE_NUMBER = os.environ['TWILIO_PHONE_NUMBER']
+DESTINY_PHONE_NUMBER = os.environ['TWILIO_DESTINY_PHONE_NUMBER']
+CLIENT = Client(ACCOUNT_SID, AUTH_TOKEN)
 
 
-# Coleta a data do sistema e formata.
+# Coleta a data do sistema ja fomatada.
 data_hoje = datetime.today().strftime('%d/%m')
 
 
@@ -28,8 +28,8 @@ def enviar_msg() -> str:
     """
 
     if texto_msg() != 'Não há relatos sobre este jogo.':
-        return client.messages.create(
-            body=texto_msg(), from_=phone_number, to=destiny_phone_number
+        return CLIENT.messages.create(
+            body=texto_msg(), from_=PHONE_NUMBER, to=DESTINY_PHONE_NUMBER
         )
 
 
@@ -37,4 +37,4 @@ def enviar_msg() -> str:
 #     data_jogo()[:2]
 # ):
 #     enviar_msg()
-# print(texto_msg())
+print(texto_msg())
