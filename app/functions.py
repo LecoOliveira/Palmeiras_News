@@ -14,10 +14,16 @@ HEADERS = {
 
 
 def data_jogo() -> str:
-    """Busca a data do próximo jogo dentro do site.
+    """
+    Busca a data do próximo jogo dentro do site.
 
     Returns:
-        str: 'dd/mm'
+        str: Retorna a data do próximo jogo no formato: 'dd/mm'
+
+    Examples:
+        >>> data_jogo()
+        '24/05'
+
     """
 
     html_principal = bs(
