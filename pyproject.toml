@@ -27,6 +27,7 @@ mkdocstrings = "^0.21.2"
 mkdocstrings-python = "^1.0.0"
 mkdocs-bootswatch = "^1.1"
 mkdocs-material = "^9.1.12"
+pymdown-extensions = "^10.0.1"
 
 [build-system]
 requires = ["poetry-core"]

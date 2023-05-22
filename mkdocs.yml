@@ -21,6 +21,9 @@ theme:
 
 markdown_extensions:
     - attr_list
+    - pymdownx.blocks.admonition
+    - pymdownx.superfences
+    - pymdownx.highlight
   
 extra_css:
     - stylesheet/extra.css
