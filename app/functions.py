@@ -13,17 +13,54 @@ HEADERS = {
 }
 
 
+def enviar_msg() -> str:
+    """Envia a mensagem para o destino definido em 'destiny_phone_number'
+
+    Returns:
+        str: Mensagem de confirmação ou de erro.
+    """
+    load_dotenv('/home/alex/Documentos/Estudos/Palmeiras_News/app/twilio.env')
+    ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
+    AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
+    PHONE_NUMBER = os.environ['TWILIO_PHONE_NUMBER']
+    DESTINY_PHONE_NUMBER = os.environ['TWILIO_DESTINY_PHONE_NUMBER']
+    CLIENT = Client(ACCOUNT_SID, AUTH_TOKEN)
+
+    if texto_msg() != 'Não há relatos sobre este jogo.':
+        return CLIENT.messages.create(
+            body=texto_msg(), from_=PHONE_NUMBER, to=DESTINY_PHONE_NUMBER
+        )
+
+
+def link_jogo() -> str:
+    """Faz a raspagem no site para encontrar o link da próxima partida.
+
+    Returns:
+        str: Retorna o link do próximo jogo.
+    """
+
+    html_principal = bs(
+        (get(URL_PRINCIPAL, headers=HEADERS)).content, 'html.parser'
+    )
+
+    return (
+        bs((get(URL_PRINCIPAL, headers=HEADERS)).content, 'html.parser')
+        .find('div', class_='faixa')
+        .find('a')
+        .get('href')
+    )
+
+
 def data_jogo() -> str:
     """
     Busca a data do próximo jogo dentro do site.
 
     Returns:
-        str: Retorna a data do próximo jogo no formato: 'dd/mm'
+        str: Retorna a data no formato: 'dd/mm'
 
     Examples:
         >>> data_jogo()
         '24/05'
-
     """
 
     html_principal = bs(
@@ -38,27 +75,15 @@ def data_jogo() -> str:
     )
 
 
-# Encontra o texto da mensagem.
-def texto_msg() -> str:
+def texto_msg(link: str) -> str:
     """Função que faz o webscraping no corpo do site.
 
     Returns:
         str: Retorna o texto ja formatado com os dados da partida.
     """
 
-    html_principal = bs(
-        (get(URL_PRINCIPAL, headers=HEADERS)).content, 'html.parser'
-    )
-
-    link_jogo = (
-        bs((get(URL_PRINCIPAL, headers=HEADERS)).content, 'html.parser')
-        .find('div', class_='faixa')
-        .find('a')
-        .get('href')
-    )
-
     texto_final = (
-        bs((get(link_jogo, headers=HEADERS)).content, 'html.parser')
+        bs((get(link, headers=HEADERS)).content, 'html.parser')
         .find('div', {'class': 'pretexto'})
         .text.strip('\n')
     )
@@ -67,32 +92,31 @@ def texto_msg() -> str:
         return texto_final
     else:
         return (
-            bs((get(link_jogo, headers=HEADERS)).content, 'html.parser')
+            bs((get(link, headers=HEADERS)).content, 'html.parser')
             .find('div', {'class': 'pretexto'})
             .find('p')
             .find('p')
             .get_text('\n')
-            .replace('\n', '\n\n')
+            .replace('\n', ' ')
         )
 
 
-def enviar_msg() -> str:
-    """Envia a mensagem para o destino definido em 'destiny_phone_number'
+def formata_texto(texto: str) -> str:
+    """Formata o texto vindo da função 'texto_msg()'
+
+    Args:
+        texto (str): Texto a ser formatado
 
     Returns:
-        str: Mensagem de confirmação ou de erro.
+        str: Texto pronto para ser enviado na função 'enviar_msg()'
     """
-    # Credenciais da conta Twilio, armazenadas em uma variável de ambiente.
-    # Para mais informações: https://www.twilio.com/docs/usage/secure-credentials
-    #                        https://www.twilio.com/blog/environment-variables-python
-    load_dotenv('/home/alex/Documentos/Estudos/Palmeiras_News/app/twilio.env')
-    ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
-    AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
-    PHONE_NUMBER = os.environ['TWILIO_PHONE_NUMBER']
-    DESTINY_PHONE_NUMBER = os.environ['TWILIO_DESTINY_PHONE_NUMBER']
-    CLIENT = Client(ACCOUNT_SID, AUTH_TOKEN)
 
-    if texto_msg() != 'Não há relatos sobre este jogo.':
-        return CLIENT.messages.create(
-            body=texto_msg(), from_=PHONE_NUMBER, to=DESTINY_PHONE_NUMBER
-        )
+    texto = texto.replace('  ', ' ')
+    index_jogo = texto.find(' l')
+    jogo = texto[:index_jogo]
+    index_camp = texto.find(')')
+    campeonato = texto[index_jogo + 2:index_camp + 1]
+    index_data_inicio = texto.find('Data')
+    index_data = texto.find('Local')
+    data = texto[index_data_inicio:index_data].replace(' l ', ' ')
+    return f'{jogo} |{campeonato}\n{data}'

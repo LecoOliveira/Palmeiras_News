@@ -11,4 +11,6 @@ data_hoje = datetime.today().strftime('%d/%m')
 #     data_jogo()[:2]
 # ):
 #     enviar_msg()
-print(data_jogo())
+link = 'https://www.palmeiras.com.br/jogo/?idjogo=2587'
+texto = texto_msg(link)
+print(formata_texto(texto))
