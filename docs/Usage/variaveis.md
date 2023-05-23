@@ -24,6 +24,8 @@ DESTINY_PHONE_NUMBER = os.environ['TWILIO_DESTINY_PHONE_NUMBER']
 CLIENT = Client(ACCOUNT_SID, AUTH_TOKEN)
 ```
 
+---
+
 É importante manter as credenciais da conta Twilio seguras, armazenando-as de maneira a impedir o acesso não autorizado. Um método comum é armazená-las em variáveis de ambiente que são acessadas no seu aplicativo. Isso os mantém fora do código e de outros lugares onde as credenciais não pertencem. Vamos dar uma olhada em como trabalhar com variáveis de ambiente. Aqui estamos utilizando o Linux, mas se esta usando Windows, pode conferir como configuras suas variáveis [aqui](https://www.twilio.com/docs/usage/secure-credentials). 
 
 
