@@ -1,3 +1,4 @@
+import os
 from re import compile
 
 from bs4 import BeautifulSoup as bs
@@ -13,8 +14,11 @@ HEADERS = {
 }
 
 
-def enviar_msg() -> str:
+def enviar_msg(texto: str) -> str:
     """Envia a mensagem para o destino definido em 'destiny_phone_number'
+
+    Args:
+        texto (str): Texto ja formatado para envio.
 
     Returns:
         str: Mensagem de confirmação ou de erro.
@@ -26,9 +30,9 @@ def enviar_msg() -> str:
     DESTINY_PHONE_NUMBER = os.environ['TWILIO_DESTINY_PHONE_NUMBER']
     CLIENT = Client(ACCOUNT_SID, AUTH_TOKEN)
 
-    if texto_msg() != 'Não há relatos sobre este jogo.':
+    if texto != 'Não há relatos sobre este jogo.':
         return CLIENT.messages.create(
-            body=texto_msg(), from_=PHONE_NUMBER, to=DESTINY_PHONE_NUMBER
+            body=texto, from_=PHONE_NUMBER, to=DESTINY_PHONE_NUMBER
         )
 
 
@@ -58,9 +62,6 @@ def data_jogo() -> str:
     Returns:
         str: Retorna a data no formato: 'dd/mm'
 
-    Examples:
-        >>> data_jogo()
-        '24/05'
     """
 
     html_principal = bs(
@@ -77,6 +78,9 @@ def data_jogo() -> str:
 
 def texto_msg(link: str) -> str:
     """Função que faz o webscraping no corpo do site.
+
+    Args:
+        str: link de onde será buscado o texto.
 
     Returns:
         str: Retorna o texto ja formatado com os dados da partida.
@@ -112,11 +116,18 @@ def formata_texto(texto: str) -> str:
     """
 
     texto = texto.replace('  ', ' ')
-    index_jogo = texto.find(' l')
-    jogo = texto[:index_jogo]
-    index_camp = texto.find(')')
-    campeonato = texto[index_jogo + 2:index_camp + 1]
-    index_data_inicio = texto.find('Data')
-    index_data = texto.find('Local')
-    data = texto[index_data_inicio:index_data].replace(' l ', ' ')
-    return f'{jogo} |{campeonato}\n{data}'
+    jogo = texto[: texto.find(' l')]
+    campeonato = texto[texto.find(' l') + 2 : texto.find(')') + 1]
+    data = texto[texto.find('Data') : texto.find('Local')].replace(' l ', ' ')
+    local = texto[texto.find('Local') : texto.find('Trans')]
+    transmissao = texto[texto.find('Trans') : texto.find('Árb')]
+    arbitro = texto[texto.find('Árb') : texto.find('Esca')]
+    escalacao = texto[texto.find('Esca') : texto.find('Pend')]
+    pendurados = texto[texto.find('Pend') : texto.find('Susp')]
+    suspensos = texto[texto.find('Susp') : texto.find('Retor')]
+    desfalques = texto[texto.find('Desf') :]
+    return (
+        f'\n{jogo} |{campeonato}\n{data}\n'
+        f'{local}\n{transmissao}\n{arbitro}\n'
+        f'{escalacao}\n{pendurados}\n{suspensos}\n{desfalques}'
+    )

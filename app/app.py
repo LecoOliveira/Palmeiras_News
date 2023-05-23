@@ -1,9 +1,8 @@
-import os
 from datetime import datetime
 
 from functions import *
 
-# Coleta a data do sistema ja fomatada.
+# Coleta a data do sistema ja formatada.
 data_hoje = datetime.today().strftime('%d/%m')
 
 
