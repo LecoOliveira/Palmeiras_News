@@ -11,6 +11,7 @@ bs4 = "^0.0.1"
 requests = "^2.30.0"
 twilio = "^8.2.0"
 python-dotenv = "^1.0.0"
+rocketry = "^2.5.1"
 
 
 [tool.poetry.group.dev.dependencies]
