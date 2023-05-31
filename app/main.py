@@ -3,7 +3,7 @@ import logging
 from rocketry import Rocketry
 from rocketry.args import Config
 
-from tasks import envia, formata, texto
+from app.tasks import envia, formata, texto
 
 app = Rocketry()
 
@@ -30,5 +30,7 @@ def set_config(config=Config()):
     config.silence_cond_check = False
 
 
-if __name__ == '__main__':
-    app.run()
+app.run()
+
+# if __name__ == '__main__':
+#     app.run()

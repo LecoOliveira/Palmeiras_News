@@ -1,14 +1,15 @@
-import os
+from os import getenv
 
 from dotenv import load_dotenv
 from rocketry import Grouper
 from rocketry.args import Return
 from rocketry.conds import after_finish
-from tasks.formata import formata_texto
 from twilio.rest import Client
 
+from app.tasks.formata import formata_texto
 
 group = Grouper()
+load_dotenv()
 
 
 @group.task(after_finish(formata_texto))
@@ -22,11 +23,10 @@ def enviar_msg(texto: str = Return(formata_texto)) -> str:
     Returns:
         str: Mensagem de confirmação ou de erro.
     """
-    load_dotenv('/home/alex/Documentos/Estudos/Palmeiras_News/app/twilio.env')
-    phones = os.environ['TWILIO_DESTINY_PHONE_NUMBER'].split(' ')
-    ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
-    AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
-    PHONE_NUMBER = os.environ['TWILIO_PHONE_NUMBER']
+    phones = getenv('TWILIO_DESTINY_PHONE_NUMBER').split(' ')
+    ACCOUNT_SID = getenv('TWILIO_ACCOUNT_SID')
+    AUTH_TOKEN = getenv('TWILIO_AUTH_TOKEN')
+    PHONE_NUMBER = getenv('TWILIO_PHONE_NUMBER')
     CLIENT = Client(ACCOUNT_SID, AUTH_TOKEN)
 
     for destiny_phone in phones:

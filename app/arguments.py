@@ -2,10 +2,10 @@ from datetime import datetime
 from re import compile
 
 from bs4 import BeautifulSoup as bs
-from constants import HEADERS, URL_PRINCIPAL
 from requests import get
 from rocketry.args import argument
 
+from app.constants import HEADERS, URL_PRINCIPAL
 
 
 @argument()
@@ -50,12 +50,12 @@ def link_jogo() -> str:
         str: Retorna o link do próximo jogo.
     """
 
-    # html_principal = bs(
-    #     (get(URL_PRINCIPAL, headers=HEADERS)).content, 'html.parser'
-    # )
+    html_principal = bs(
+        (get(URL_PRINCIPAL, headers=HEADERS)).content, 'html.parser'
+    )
 
-    # return html_principal.find('div', class_='faixa').find('a').get('href')
-    return 'https://www.palmeiras.com.br/jogo/?idjogo=2588'
+    return html_principal.find('div', class_='faixa').find('a').get('href')
+    # return 'https://www.palmeiras.com.br/jogo/?idjogo=2588'
 
 
 @argument()
@@ -80,4 +80,5 @@ def hora_jogo():
     #     .replace('|', '')
     # )
 
-    return '23:39'  # f'{str(int(hora_jogo[:2]) - 2)}:00'
+    # return f'{str(int(hora_jogo[:2]) - 2)}:00'
+    return '19:28'

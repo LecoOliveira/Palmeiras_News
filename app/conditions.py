@@ -1,5 +1,6 @@
-from arguments import data_hoje, data_jogo
 from rocketry.conds import condition
+
+from app.arguments import data_hoje, data_jogo
 
 
 @condition()

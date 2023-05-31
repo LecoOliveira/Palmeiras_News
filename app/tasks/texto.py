@@ -1,15 +1,15 @@
-from arguments import hora_jogo, link_jogo
 from bs4 import BeautifulSoup as bs
-from conditions import data_igual
-from constants import HEADERS
 from requests import get
 from rocketry import Grouper
 from rocketry.args import Arg, FuncArg, Return
 from rocketry.conds import daily, retry, time_of_day
 
+from app.arguments import hora_jogo, link_jogo
+from app.conditions import data_igual
+from app.constants import HEADERS
 
 group = Grouper()
-hora_max = '00:00' # f'{str(int(hora_jogo()[:2]) + 1)}:30'
+hora_max = '20:00'  # f'{str(int(hora_jogo()[:2]) + 2)}:30'
 
 
 @group.task(
