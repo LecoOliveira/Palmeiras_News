@@ -2,10 +2,10 @@ from datetime import datetime
 from re import compile
 
 from bs4 import BeautifulSoup as bs
+from constants import HEADERS, URL_PRINCIPAL
 from requests import get
 from rocketry.args import argument
 
-from constants import HEADERS, URL_PRINCIPAL
 
 
 @argument()
@@ -80,4 +80,4 @@ def hora_jogo():
     #     .replace('|', '')
     # )
 
-    return '22:00'# f'{str(int(hora_jogo[:2]) - 2)}:00'
+    return '23:39'  # f'{str(int(hora_jogo[:2]) - 2)}:00'

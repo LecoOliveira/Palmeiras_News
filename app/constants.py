@@ -1,5 +1,3 @@
-# from arguments import hora_jogo
-
 URL_PRINCIPAL = 'https://www.palmeiras.com.br/home/'
 
 HEADERS = {

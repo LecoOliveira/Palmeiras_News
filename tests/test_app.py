@@ -1,6 +1,6 @@
 import re
 
-from functions import *
+from app.tasks.texto import *
 
 my_regex = re.compile('../..')
 link = link_jogo()

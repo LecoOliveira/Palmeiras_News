@@ -4,10 +4,8 @@ from dotenv import load_dotenv
 from rocketry import Grouper
 from rocketry.args import Return
 from rocketry.conds import after_finish
-from twilio.rest import Client
-
-
 from tasks.formata import formata_texto
+from twilio.rest import Client
 
 
 group = Grouper()

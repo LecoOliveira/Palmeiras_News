@@ -1,12 +1,9 @@
-from rocketry.conds import condition
-
 from arguments import data_hoje, data_jogo
+from rocketry.conds import condition
 
 
 @condition()
-def data_igual(
-    data: str = data_hoje, data_jogo: str = data_jogo
-) -> bool:
+def data_igual(data: str = data_hoje, data_jogo: str = data_jogo) -> bool:
     """
     Função que se torna uma condição através da biblioteca 'Rocketry',
     a saída dela determina se a próxima função roda ou não dentro das nossas tarefas.
