@@ -4,6 +4,12 @@ version = "0.1.0"
 description = "Web Scraping que pega informações do proximo jogo do Palmeiras no site oficial, e envia pos SMS."
 authors = ["LecoOliveira <lecoverde10@gmail.com>"]
 readme = "README.md"
+packages = [
+    { include = "app" }
+]
+
+[tool.poetry.scripts]
+palmeiras = "app.main:app"
 
 [tool.poetry.dependencies]
 python = "^3.10"
