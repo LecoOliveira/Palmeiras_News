@@ -30,7 +30,5 @@ def set_config(config=Config()):
     config.silence_cond_check = False
 
 
-app.run()
-
 # if __name__ == '__main__':
 #     app.run()
