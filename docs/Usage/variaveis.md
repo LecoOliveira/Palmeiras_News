@@ -26,18 +26,30 @@ CLIENT = Client(ACCOUNT_SID, AUTH_TOKEN)
 
 ---
 
-É importante manter as credenciais da conta Twilio seguras, armazenando-as de maneira a impedir o acesso não autorizado. Um método comum é armazená-las em variáveis de ambiente que são acessadas no seu aplicativo. Isso os mantém fora do código e de outros lugares onde as credenciais não pertencem. Vamos dar uma olhada em como trabalhar com variáveis de ambiente. Aqui estamos utilizando o Linux, mas se esta usando Windows, pode conferir como configuras suas variáveis [aqui](https://www.twilio.com/docs/usage/secure-credentials). 
+É importante manter as credenciais da conta Twilio seguras, armazenando-as de maneira a impedir o acesso não autorizado. Um método comum é armazená-las em variáveis de ambiente que são acessadas no seu aplicativo. Isso os mantém fora do código e de outros lugares onde as credenciais não pertencem.
+Para adicionar as variáveis automaticamente no nosso arquivo, temos os seguintes comandos no CLI do nosso programa que precisarão ser configurados antes de rodar o programa pela primeira vez: ```sid```,  ```token```, ```twilio-phone``` e ```destiny-phone```.
 
 
-```bash title="bash"
-echo "export TWILIO_ACCOUNT_SID='ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'" > twilio.env
-echo "export TWILIO_AUTH_TOKEN='your_auth_token'" >> twilio.env
-echo "export TWILIO_PHONE_NUMBER='your_phone_number'" >> twilio.env
-echo "export TWILIO_DESTINY_PHONE_NUMBER='destiny_phone_number'" >> twilio.env
+><sub> O `destiny_phone` é o número para onde será enviada a mensagem, mas não pode ser qualquer número. Ele deve ser devidamente cadastrado e ativado no seu painel na Twilio. Sem isso, ele não irá receber as mensagens.</sub>
+
+///warning | Atenção
+Você só pode adicionar um SID, um TOKEN e um TWILIO_PHONE, então cuidado ao adicioná - los.
+///
+
+Para adicionar a sua credencial `ACCOUNT_SID` digite no seu terminal:
+
+```bash
+palmeiras sid SEU_ACCOUNT_SID
 ```
+O mesmo comando pode ser usado para os demais, como no exemplo:
 
-><sub> O `destiny_phone_number` é o número para onde será enviada a mensagem, mas não pode ser qualquer número. Ele deve ser devidamente cadastrado e ativado no seu painel na Twilio.</sub>
-
+```bash
+palmeiras token SEU_ACCOUNT_TOKEN
+```
+ou
+```bash
+palmeiras twilio-phone SEU_TWILIO_PHONE
+```
 
 /// tip | Atenção
 Por segurança, as credenciais da conta Twilio devem ser armazenadas em uma variável de ambiente.
