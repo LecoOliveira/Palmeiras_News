@@ -4,10 +4,11 @@ from typing import List
 
 import typer
 from rich.console import Console
+from typing_extensions import Annotated
 
 from app.main import app
 
-cli = typer.Typer(help='Inerface para adição de variáveis de ambiente.')
+cli = typer.Typer(help='Interface para adição de variáveis de ambiente.')
 console = Console()
 
 
@@ -35,49 +36,75 @@ def adicionar_linha(chave: str, valor: str):
 
 
 @cli.command()
-def sid(sid: str):
+def sid(
+    sid: Annotated[
+        str,
+        typer.Argument(
+            help='Seu SID gerado ao efetuar cadastro na Twilio',
+            show_default=False,
+        ),
+    ]
+):
     """
     Adiciona o SID da conta Twilio na variável de ambiente;
-    Usage: palmeiras sid YOUR_TWILIO_SID
 
-    Args:
-        sid (str): SID disponibilizado pela Twilio ao criar a sua conta.
+    Usage: palmeiras sid YOUR_TWILIO_SID
     """
     adicionar_linha('TWILIO_SID', sid)
 
 
 @cli.command()
-def token(token: str):
+def token(
+    token: Annotated[
+        str,
+        typer.Argument(
+            help='Token gerado ao efetuar cadastro na Twilio',
+            show_default=False,
+        ),
+    ]
+):
     """
     Adiciona o TOKEN da conta Twilio na variável de ambiente;
-    Usage: palmeiras token YOUR_TWILIO_TOKEN
 
-    Args:
-        token (str): TOKEN disponibilizado pela Twilio ao criar a sua conta.
+    Usage: palmeiras token YOUR_TWILIO_TOKEN
     """
     adicionar_linha('TWILIO_TOKEN', token)
 
 
 @cli.command()
-def twilio_phone(phone: str):
+def twilio_phone(
+    phone: Annotated[
+        str,
+        typer.Argument(
+            help='Número americano gerado pela Twilio',
+            show_default=False,
+        ),
+    ]
+):
     """
     Adiciona o seu PHONE_NUMBER da conta Twilio na variável de ambiente;
-    Usage: palmeiras twilio-phone YOUR_TWILIO_PHONE
 
-    Args:
-        phone (str): Telefone gerado pela conta Twilio.
+    Usage: palmeiras twilio-phone YOUR_TWILIO_PHONE
     """
     adicionar_linha('TWILIO_PHONE_NUMBER', phone)
 
 
 @cli.command()
-def destiny_phone(phones: List[str]):
+def destiny_phone(
+    phones: Annotated[
+        List[str],
+        typer.Argument(
+            help='Um ou mais telefones que deseja configurar '
+            '(números devem ser separados por espaço); '
+            'Ex: +551199999999 +5511999999999',
+            show_default=False,
+        ),
+    ]
+):
     """
     Adiciona números de destino para onde serão enviadas as mensagens;
-    Usage: palmeiras destiny-phone YOUR_TWILIO_DESTINY_PHONES (Separados por espaço)
 
-    Args:
-        phone (str): Número de destino das mensagens (cadastrados previamente no site).
+    Usage: palmeiras destiny-phone YOUR_TWILIO_DESTINY_PHONES
     """
     chave = 'DESTINY_PHONE_NUMBER'
     if not os.path.exists('teste.txt'):
@@ -114,16 +141,45 @@ def destiny_phone(phones: List[str]):
 
 @cli.command('show')
 def listar(
-    destiny_phone: bool = False,
-    sid: bool = False,
-    twilio_phone: bool = False,
-    token: bool = False,
+    destiny_phone: Annotated[
+        bool,
+        typer.Option(
+            help='Lista todos os números cadastrados para receber as mensagens;',
+            show_default=False,
+        ),
+    ] = False,
+    sid: Annotated[
+        bool,
+        typer.Option(
+            help='Lista o SID configurado no arquivo de variável;',
+            show_default=False,
+        ),
+    ] = False,
+    twilio_phone: Annotated[
+        bool,
+        typer.Option(
+            help='Lista o TWILIO_PHONE_NUMBER configurado no arquivo de variável;',
+            show_default=False,
+        ),
+    ] = False,
+    token: Annotated[
+        bool,
+        typer.Option(
+            help='Lista o TWILIO_TOKEN configurado no arquivo de variável;',
+            show_default=False,
+        ),
+    ] = False,
 ):
     """
-    Lista todas as variáveis de ambiente cadastradas.
-    Args: --phone, --destiny-phone, --sid, --twilio-phone;
+    Lista todas as variáveis de ambiente cadastradas;
+    Usage: palmeiras show --phone;
+    Options: --phone, --destiny-phone, --sid, --twilio-phone;
 
-    Ex: palmeiras show --sid
+    Args:
+        destiny_phone (Annotated[ bool, typer.Option, optional): _description_. Defaults to 'Lista todos os números cadastrados para receber as mensagens;', show_default=False, ), ]=False.
+        sid (Annotated[ bool, typer.Option, optional): _description_. Defaults to 'Lista o SID configurado no arquivo de variável;', show_default=False, ), ]=False.
+        twilio_phone (Annotated[ bool, typer.Option, optional): _description_. Defaults to 'Lista o TWILIO_PHONE_NUMBER configurado no arquivo de variável;', show_default=False, ), ]=False.
+        token (Annotated[ bool, typer.Option, optional): _description_. Defaults to 'Lista o TWILIO_TOKEN configurado no arquivo de variável;', show_default=False, ), ]=False.
     """
 
     option = {
@@ -134,11 +190,8 @@ def listar(
     }.get(True, None)
 
     if option is None:
-        console.log(
-            '\nNenhuma opção selecionada. Por favor, '
-            'escolha uma das opções:\n --twilio-phone, '
-            '--destiny-phone, --sid ou --token.\n'
-        )
+        with open('teste.txt', 'r') as fr:
+            console.log(''.join(fr))
         return
 
     try:
@@ -150,33 +203,41 @@ def listar(
             else:
                 console.log(
                     f'\nNenhuma variável de ambiente "{option}" encontrada.\n'
-                    f'Tente: palmeiras [OPTION] [ARG]\n'
+                    f'Para cadastrar tente: '
+                    f'\npalmeiras [OPTION] [ARG] ou palmeiras --help\n'
                 )
     except IOError:
         console.log('Erro ao ler o arquivo.')
 
 
 @cli.command()
-def delete(variavel: str):
+def delete(
+    variavel: Annotated[
+        str,
+        typer.Argument(
+            help='Variável qeu será excluída',
+            show_default=False,
+        ),
+    ]
+):
     """
     Exclui uma das configurações do arquivo de variável de ambiente.
+
     Ex: palmeiras delete sid
-    Args:
-        variavel (str): Variável que deseja apagar.
     """
     option = {
-        'destiny_phone' : 'DESTINY_PHONE_NUMBER',
-        'sid' : 'TWILIO_SID',
-        'twilio_phone' : 'TWILIO_PHONE_NUMBER',
-        'token' : 'TWILIO_TOKEN',
+        'destiny_phone': 'DESTINY_PHONE_NUMBER',
+        'sid': 'TWILIO_SID',
+        'twilio_phone': 'TWILIO_PHONE_NUMBER',
+        'token': 'TWILIO_TOKEN',
     }
     variaveis = open('teste.txt').read().split('\n')
-    for i, item in enumerate(variaveis):            
+    for i, item in enumerate(variaveis):
         if option[variavel] in variaveis[i]:
             variaveis.remove(item)
             console.log(f'{option[variavel]} removido com sucesso.')
             return
-    else:   
+    else:
         console.log(f'O arquivo não contém nenhum {option[variavel]}.')
     open('teste.txt', 'w').write('\n'.join(variaveis))
 
