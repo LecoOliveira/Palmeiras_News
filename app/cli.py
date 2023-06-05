@@ -1,14 +1,19 @@
 import os
+import subprocess
+from typing import List
+
 import typer
+from rich.console import Console
 
 from app.main import app
 
-cli = typer.Typer()
+cli = typer.Typer(help='Inerface para adição de variáveis de ambiente.')
+console = Console()
 
 
 def adicionar_linha(chave: str, valor: str):
     """
-    Função principal que adiciona os arquivos no arquivo de variável de ambiente.
+    Função principal que adiciona os dados no arquivo de variável de ambiente.
 
     Args:
         chave (str): Recebe a chave da variável a ser criada.
@@ -24,9 +29,9 @@ def adicionar_linha(chave: str, valor: str):
         linhas = arquivo.readlines()
         if not any(chave in linha for linha in linhas):
             arquivo.write(f'\n{chave}="{valor}"')
-            typer.echo(f'{chave} adicionada com sucesso!')
+            console.log(f'{chave} adicionada com sucesso!')
         else:
-            typer.echo(f'{chave} já existente no arquivo.')
+            console.log(f'{chave} já existente no arquivo.')
 
 
 @cli.command()
@@ -34,10 +39,9 @@ def sid(sid: str):
     """
     Adiciona o SID da conta Twilio na variável de ambiente;
     Usage: palmeiras sid YOUR_TWILIO_SID
-    
-    Args:
-        sid (str): SID da conta na Twilio.
 
+    Args:
+        sid (str): SID disponibilizado pela Twilio ao criar a sua conta.
     """
     adicionar_linha('TWILIO_SID', sid)
 
@@ -49,8 +53,7 @@ def token(token: str):
     Usage: palmeiras token YOUR_TWILIO_TOKEN
 
     Args:
-        token (str): TOKEN da conta na Twilio.
-
+        token (str): TOKEN disponibilizado pela Twilio ao criar a sua conta.
     """
     adicionar_linha('TWILIO_TOKEN', token)
 
@@ -63,20 +66,18 @@ def twilio_phone(phone: str):
 
     Args:
         phone (str): Telefone gerado pela conta Twilio.
-
     """
     adicionar_linha('TWILIO_PHONE_NUMBER', phone)
 
 
 @cli.command()
-def destiny_phone(phone: str):
+def destiny_phone(phones: List[str]):
     """
     Adiciona números de destino para onde serão enviadas as mensagens;
-    Usage: palmeiras destiny-phone YOUR_TWILIO_DESTINY_PHONE
+    Usage: palmeiras destiny-phone YOUR_TWILIO_DESTINY_PHONES (Separados por espaço)
 
     Args:
-        phone (str): Numero de destino das mensagens (cadastrados previamente no site).
-
+        phone (str): Número de destino das mensagens (cadastrados previamente no site).
     """
     chave = 'DESTINY_PHONE_NUMBER'
     if not os.path.exists('teste.txt'):
@@ -94,19 +95,24 @@ def destiny_phone(phone: str):
                 for linha in linhas
                 if chave in linha
             ]
-            if phone not in numeros_telefone[0]:
-                numeros_telefone = f'{numeros_telefone[0]} {phone}'
-                with open('teste.txt', 'w') as fw:
-                    for linha in linhas:
-                        if chave not in linha:
-                            fw.write(linha)
-                    else:
-                        fw.write(f'{chave}="{numeros_telefone}"')
-            else:
-                typer.echo('O número de telefone já está configurado.')
+            for phone in phones:
+                if phone not in numeros_telefone[0]:
+                    numeros_telefone = f'{numeros_telefone[0]} {phone}'
+                    with open('teste.txt', 'w') as fw:
+                        for linha in linhas:
+                            if chave not in linha:
+                                fw.write(linha)
+                        else:
+                            fw.write(f'{chave}="{numeros_telefone}"')
+                            console.log(
+                                f'O número {phone} foi adicionada com sucesso!'
+                            )
+
+                else:
+                    console.log(f'O número {phone} já está configurado.')
 
 
-@cli.command()
+@cli.command('show')
 def listar(
     destiny_phone: bool = False,
     sid: bool = False,
@@ -116,8 +122,8 @@ def listar(
     """
     Lista todas as variáveis de ambiente cadastradas.
     Args: --phone, --destiny-phone, --sid, --twilio-phone;
-    
-    Ex: palmeiras listar --sid
+
+    Ex: palmeiras show --sid
     """
 
     option = {
@@ -128,7 +134,7 @@ def listar(
     }.get(True, None)
 
     if option is None:
-        typer.echo(
+        console.log(
             '\nNenhuma opção selecionada. Por favor, '
             'escolha uma das opções:\n --twilio-phone, '
             '--destiny-phone, --sid ou --token.\n'
@@ -140,19 +146,45 @@ def listar(
             linhas = fr.readlines()
             valores = [linha for linha in linhas if option in linha]
             if valores:
-                typer.echo(''.join(valores))
+                console.log(''.join(valores))
             else:
-                typer.echo(
+                console.log(
                     f'\nNenhuma variável de ambiente "{option}" encontrada.\n'
                     f'Tente: palmeiras [OPTION] [ARG]\n'
                 )
     except IOError:
-        typer.echo('Erro ao ler o arquivo.')
+        console.log('Erro ao ler o arquivo.')
+
+
+@cli.command()
+def delete(variavel: str):
+    """
+    Exclui uma das configurações do arquivo de variável de ambiente.
+    Ex: palmeiras delete sid
+    Args:
+        variavel (str): Variável que deseja apagar.
+    """
+    option = {
+        'destiny_phone' : 'DESTINY_PHONE_NUMBER',
+        'sid' : 'TWILIO_SID',
+        'twilio_phone' : 'TWILIO_PHONE_NUMBER',
+        'token' : 'TWILIO_TOKEN',
+    }
+    variaveis = open('teste.txt').read().split('\n')
+    for i, item in enumerate(variaveis):            
+        if option[variavel] in variaveis[i]:
+            variaveis.remove(item)
+            console.log(f'{option[variavel]} removido com sucesso.')
+            return
+    else:   
+        console.log(f'O arquivo não contém nenhum {option[variavel]}.')
+    open('teste.txt', 'w').write('\n'.join(variaveis))
 
 
 @cli.command()
 def iniciar():
     app.run()
+
 
 if __name__ == '__main__':
     cli()
