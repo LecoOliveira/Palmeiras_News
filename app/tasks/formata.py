@@ -18,6 +18,8 @@ def formata_texto(texto: str = Return(texto_msg)) -> str:
     Returns:
         str: Texto pronto para ser enviado na função 'enviar_msg()'.
     """
+    texto = str(texto)
+
     if texto is not None:
         texto = texto.replace('  ', ' ')
         jogo = texto[: texto.find(' l')]

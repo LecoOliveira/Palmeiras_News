@@ -16,8 +16,8 @@ def data_hoje() -> str:
     Returns:
         str: Retorna a data do dia, no formato 'dd/mm'.
     """
-    # return datetime.today().strftime('%d/%m')
-    return '04/06'
+    return datetime.today().strftime('%d/%m')
+    # return '04/06'
 
 
 @argument()
@@ -50,12 +50,12 @@ def link_jogo() -> str:
         str: Retorna o link do próximo jogo.
     """
 
-    # html_principal = bs(
-    #     (get(URL_PRINCIPAL, headers=HEADERS)).content, 'html.parser'
-    # )
+    html_principal = bs(
+        (get(URL_PRINCIPAL, headers=HEADERS)).content, 'html.parser'
+    )
 
-    # return html_principal.find('div', class_='faixa').find('a').get('href')
-    return 'https://www.palmeiras.com.br/jogo/?idjogo=2588'
+    return html_principal.find('div', class_='faixa').find('a').get('href')
+    # return 'https://www.palmeiras.com.br/jogo/?idjogo=2588'
 
 
 @argument()
@@ -67,18 +67,18 @@ def hora_jogo():
         str: Retorna a hora no formato: 'dd/mm'
     """
 
-    # html_principal = bs(
-    #     (get(URL_PRINCIPAL, headers=HEADERS)).content, 'html.parser'
-    # )
+    html_principal = bs(
+        (get(URL_PRINCIPAL, headers=HEADERS)).content, 'html.parser'
+    )
 
-    # hora_jogo = (
-    #     html_principal.find('div', class_='faixa')
-    #     .find('div', {'class': 'header-tempo-real-campeonato'})
-    #     .find(string=compile('..H..'))
-    #     .strip()
-    #     .replace('\n', '')
-    #     .replace('|', '')
-    # )
+    hora_jogo = (
+        html_principal.find('div', class_='faixa')
+        .find('div', {'class': 'header-tempo-real-campeonato'})
+        .find(string=compile('..H..'))
+        .strip()
+        .replace('\n', '')
+        .replace('|', '')
+    )
 
-    # return f'{str(int(hora_jogo[:2]) - 2)}:00'
-    return '16:44'
+    return f'{str(int(hora_jogo[:2]) - 2)}:00'
+    # return '16:44'

@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from rocketry import Grouper
 from rocketry.args import Return
 from rocketry.conds import after_finish
+from twilio.base.exceptions import TwilioRestException
 from twilio.rest import Client
 
 from app.tasks.formata import formata_texto
@@ -29,8 +30,12 @@ def enviar_msg(texto: str = Return(formata_texto)) -> str:
     PHONE_NUMBER = getenv('TWILIO_PHONE_NUMBER')
     CLIENT = Client(ACCOUNT_SID, AUTH_TOKEN)
 
-    for destiny_phone in phones:
-        message = CLIENT.messages.create(
-            body=texto, from_=PHONE_NUMBER, to=destiny_phone
-        )
-        print(message.sid)
+    try:
+        for destiny_phone in phones:
+            message = CLIENT.messages.create(
+                body=texto, from_=PHONE_NUMBER, to=destiny_phone
+            )
+            print(message.sid)
+
+    except TwilioRestException as erro:
+        print(erro)
