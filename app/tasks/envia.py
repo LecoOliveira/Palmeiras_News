@@ -30,12 +30,13 @@ def enviar_msg(texto: str = Return(formata_texto)) -> str:
     Returns:
         str: Mensagem de confirmação ou de erro.
     """
+
     try:
         for destiny_phone in phones:
             message = CLIENT.messages.create(
                 body=texto, from_=PHONE_NUMBER, to=destiny_phone
             )
-            print(message.sid)
+            return message.sid
 
     except TwilioRestException as erro:
         print(erro)

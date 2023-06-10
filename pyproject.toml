@@ -10,6 +10,7 @@ packages = [
 
 [tool.poetry.scripts]
 palmeiras = "app.cli:cli"
+palmeiras-run = "app.main:app.run()"
 
 [tool.poetry.dependencies]
 python = "^3.10"
