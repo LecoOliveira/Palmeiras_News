@@ -1,5 +1,13 @@
 site_name: Palmeiras news
 
+nav:
+    - Home: index.md
+    - Usage: 
+        - Usage/variaveis.md
+        - Usage/listar.md
+    - API:
+        - API/arguments.md
+
 repo_url: https://github.com/LecoOliveira/Palmeiras_News
 repo_name: LecoOliveira/Palmeiras_News
 edit_uri: /tree/main/docs

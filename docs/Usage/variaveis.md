@@ -29,10 +29,7 @@ CLIENT = Client(ACCOUNT_SID, AUTH_TOKEN)
 É importante manter as credenciais da conta Twilio seguras, armazenando-as de maneira a impedir o acesso não autorizado. Um método comum é armazená-las em variáveis de ambiente que são acessadas no seu aplicativo. Isso os mantém fora do código e de outros lugares onde as credenciais não pertencem.
 Para adicionar as variáveis automaticamente no nosso arquivo, temos os seguintes comandos no CLI do nosso programa que precisarão ser configurados antes de rodar o programa pela primeira vez: ```sid```,  ```token```, ```twilio-phone``` e ```destiny-phone```.
 
-
-><sub> O `destiny_phone` é o número para onde será enviada a mensagem, mas não pode ser qualquer número. Ele deve ser devidamente cadastrado e ativado no seu painel na Twilio. Sem isso, ele não irá receber as mensagens.</sub>
-
-///warning | Atenção
+///warning | Importante
 Você só pode adicionar um SID, um TOKEN e um TWILIO_PHONE, então cuidado ao adicioná - los.
 ///
 
@@ -51,14 +48,14 @@ ou
 palmeiras twilio-phone SEU_TWILIO_PHONE
 ```
 
-/// tip | Atenção
-Por segurança, as credenciais da conta Twilio devem ser armazenadas em uma variável de ambiente.
-Veja mais informações de como armazenar as [variáveis de ambiente](https://www.twilio.com/docs/usage/secure-credentials) e de [como acessa-las](https://www.twilio.com/blog/environment-variables-python).
-///  
+Já no caso do `destiny-phone`, é possível adicionar um ou mais de um número por vez, tendo em vista que podemos querer encaminhar as mensagens para vários números. Para ele digite os números que deseja adicionar separados por espaços:
 
-
-Examples:
-```python
-    >>> data_jogo()
-    '24/05'
+```bash
+palmeiras destiny-phone SEU_DESTINY_PHONE1 SEU_DESTINY_PHONE2 ...
 ```
+
+/// tip | Atenção
+Importante lembrar, que todos os `destiny_phone` devem ser cadastrados e devidamente ativados no seu painel da Twilio. Sem isso, eles não irão receber as mensagens.
+/// 
+
+E sim, para cada número cadastrado, será cobrado pela mensagem enviada. A ideia inicial é para que seja um projeto simples, pessoal. Más que também pode ser explorado de formas mais amplas, caso queiram.
