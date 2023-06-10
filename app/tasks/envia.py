@@ -12,6 +12,12 @@ from app.tasks.formata import formata_texto
 group = Grouper()
 load_dotenv()
 
+phones = getenv('TWILIO_DESTINY_PHONE_NUMBER').split(' ')
+ACCOUNT_SID = getenv('TWILIO_ACCOUNT_SID')
+AUTH_TOKEN = getenv('TWILIO_AUTH_TOKEN')
+PHONE_NUMBER = getenv('TWILIO_PHONE_NUMBER')
+CLIENT = Client(ACCOUNT_SID, AUTH_TOKEN)
+
 
 @group.task(after_finish(formata_texto))
 def enviar_msg(texto: str = Return(formata_texto)) -> str:
@@ -24,12 +30,6 @@ def enviar_msg(texto: str = Return(formata_texto)) -> str:
     Returns:
         str: Mensagem de confirmação ou de erro.
     """
-    phones = getenv('TWILIO_DESTINY_PHONE_NUMBER').split(' ')
-    ACCOUNT_SID = getenv('TWILIO_ACCOUNT_SID')
-    AUTH_TOKEN = getenv('TWILIO_AUTH_TOKEN')
-    PHONE_NUMBER = getenv('TWILIO_PHONE_NUMBER')
-    CLIENT = Client(ACCOUNT_SID, AUTH_TOKEN)
-
     try:
         for destiny_phone in phones:
             message = CLIENT.messages.create(
