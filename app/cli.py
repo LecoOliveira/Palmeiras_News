@@ -6,8 +6,6 @@ import typer
 from rich.console import Console
 from typing_extensions import Annotated
 
-from app.main import app
-
 cli = typer.Typer(help='Interface para adição de variáveis de ambiente.')
 console = Console()
 env = '.env'
@@ -31,9 +29,11 @@ def adicionar_linha(chave: str, valor: str):
         linhas = arquivo.readlines()
         if not any(chave in linha for linha in linhas):
             arquivo.write(f'{chave}="{valor}"\n')
-            console.log(f'{chave} adicionada com sucesso!')
+            print()
+            console.log(f'{chave} adicionada com sucesso!\n')
         else:
-            console.log(f'{chave} já existente no arquivo.')
+            print()
+            console.log(f'{chave} já existente no arquivo.\n')
 
 
 @cli.command()
@@ -141,11 +141,11 @@ def destiny_phone(
                         f'{partes_linha[0]}"{phones_agrupados}"'
                         f'{partes_linha[2]}\n'
                     )
-                    print(partes_linha[2])
                     linhas[i] = linha
 
                 for phone in phones_adicionados:
-                    console.log(f'{chave} {phone} adicionado com sucesso.')
+                    print()
+                    console.log(f'{chave} {phone} adicionado com sucesso.\n')
 
                 for phone in phones:
                     if str(phone) in twilio_phones_list:
@@ -153,8 +153,9 @@ def destiny_phone(
                             str(phone) in twilio_phones_list
                             and str(phone) not in phones_adicionados
                         ):
+                            print()
                             console.log(
-                                f'O telefone {phone} já existe no arquivo.'
+                                f'O telefone {phone} já existe no arquivo.\n'
                             )
 
                 encontrado = True
@@ -162,35 +163,13 @@ def destiny_phone(
 
         if not encontrado:
             linhas.append(f'{chave}="{" ".join(phones)}"\n')
+            print()
+            console.log(
+                f'{chave} {" ".join(phones)} adicionado(s) com sucesso.\n'
+            )
 
         file.seek(0)
         file.writelines(linhas)
-    # with open(env, 'r+') as fr:
-    #     linhas = fr.readlines()
-    #     if not any(chave in linha for linha in linhas):
-    #         adicionar_linha(chave, ' '.join(phones))
-
-    #     else:
-    #         lista_phones = [
-    #             linha.split('=')[1].replace('"', '').strip()
-    #             for linha in linhas
-    #             if chave in linha
-    #         ]
-    #         for phone in phones:
-    #             if phone not in lista_phones[0]:
-    #                 lista_phones = f'{lista_phones[0]} {" ".join(phones)}'
-    #                 with open(env, 'w') as fw:
-    #                     for linha in linhas:
-    #                         if chave not in linha:
-    #                             fw.write(linha)
-    #                     else:
-    #                         fw.write(f'{chave}="{lista_phones}"')
-    #                         console.log(
-    #                             f'O número {phone} foi adicionada com sucesso!'
-    #                         )
-
-    #             else:
-    #                 console.log(f'O número {phone} já está configurado.')
 
 
 @cli.command('show')
@@ -254,6 +233,7 @@ def listar(
 
     if option is None:
         with open(env, 'r') as fr:
+            print()
             console.log(''.join(fr))
         return
 
@@ -262,15 +242,18 @@ def listar(
             linhas = fr.readlines()
             valores = [linha for linha in linhas if option in linha]
             if valores:
+                print()
                 console.log(''.join(valores))
             else:
+                print()
                 console.log(
-                    f'\nNenhuma variável de ambiente "{option}" encontrada.\n'
+                    f'Nenhuma variável de ambiente "{option}" encontrada.\n'
                     f'Para cadastrar tente: '
                     f'\npalmeiras [OPTION] [ARG] ou palmeiras --help\n'
                 )
     except IOError:
-        console.log('Erro ao ler o arquivo.')
+        print()
+        console.log('Erro ao ler o arquivo.\n')
 
 
 @cli.command()
@@ -294,21 +277,23 @@ def delete(
         'twilio_phone': 'TWILIO_PHONE_NUMBER',
         'token': 'TWILIO_AUTH_TOKEN',
     }
-    variaveis = open(env).read().split('\n')
-    for i, item in enumerate(variaveis):
-        if option[variavel] in variaveis[i]:
-            variaveis.remove(item)
-            console.log(f'{option[variavel]} removido com sucesso.')
-            return
-    else:
-        console.log(f'O arquivo não contém nenhum {option[variavel]}.')
-    open(env, 'w').write('\n'.join(variaveis))
+    with open(env, 'r') as file:
+        variaveis = file.readlines()
+        encontrado = False
+        
+        for i, item in enumerate(variaveis):
+            if option[variavel] in variaveis[i]:
+                variaveis.remove(item)
+                print()
+                console.log(f'{option[variavel]} removido com sucesso.\n')
+                with open(env, 'w') as fw:
+                    arquivo = fw.write(''.join(variaveis))
+                return
+        else:
+            print()
+            console.log(f'O arquivo não contém nenhum {option[variavel]}.\n')
 
 
-@cli.command()
-def iniciar():
-    app.run()
 
-
-if __name__ == '__main__':
-    cli()
+# if __name__ == '__main__':
+#     cli()
