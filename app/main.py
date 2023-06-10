@@ -7,15 +7,10 @@ from app.tasks import envia, formata, texto
 
 app = Rocketry()
 
-# Set Task Groups
-# ---------------
-
 app.include_grouper(texto.group)
 app.include_grouper(envia.group)
 app.include_grouper(formata.group)
 
-# Application Setup
-# -----------------
 
 handler = logging.StreamHandler()
 handler.setLevel(logging.DEBUG)
