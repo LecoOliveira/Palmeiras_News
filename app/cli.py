@@ -10,6 +10,7 @@ from app.main import app
 
 cli = typer.Typer(help='Interface para adição de variáveis de ambiente.')
 console = Console()
+env = '.env'
 
 
 def adicionar_linha(chave: str, valor: str):
@@ -23,13 +24,13 @@ def adicionar_linha(chave: str, valor: str):
         O resultado final ficará assim:
         ```CHAVE_DA_VARIAVEL="valor_da_variavel"```
     """
-    if not os.path.exists('teste.txt'):
-        with open('teste.txt', 'w') as arq:
-            arquivo = arq.write(' ')
-    with open('teste.txt', 'r+') as arquivo:
+    if not os.path.exists(env):
+        with open(env, 'w+') as arq:
+            arquivo = arq.write('')
+    with open(env, 'r+') as arquivo:
         linhas = arquivo.readlines()
         if not any(chave in linha for linha in linhas):
-            arquivo.write(f'\n{chave}="{valor}"')
+            arquivo.write(f'{chave}="{valor}"\n')
             console.log(f'{chave} adicionada com sucesso!')
         else:
             console.log(f'{chave} já existente no arquivo.')
@@ -48,9 +49,9 @@ def sid(
     """
     Adiciona o SID da conta Twilio na variável de ambiente;
 
-    Usage: palmeiras sid YOUR_TWILIO_SID
+    Usage: palmeiras sid YOUR_TWILIO_ACCOUNT_SID
     """
-    adicionar_linha('TWILIO_SID', sid)
+    adicionar_linha('TWILIO_ACCOUNT_SID', sid)
 
 
 @cli.command()
@@ -66,9 +67,9 @@ def token(
     """
     Adiciona o TOKEN da conta Twilio na variável de ambiente;
 
-    Usage: palmeiras token YOUR_TWILIO_TOKEN
+    Usage: palmeiras token YOUR_TWILIO_AUTH_TOKEN
     """
-    adicionar_linha('TWILIO_TOKEN', token)
+    adicionar_linha('TWILIO_AUTH_TOKEN', token)
 
 
 @cli.command()
@@ -94,7 +95,7 @@ def destiny_phone(
     phones: Annotated[
         List[str],
         typer.Argument(
-            help='Um ou mais telefones que deseja configurar '
+            help='Um ou mais lista_phones que deseja configurar '
             '(números devem ser separados por espaço); '
             'Ex: +551199999999 +5511999999999',
             show_default=False,
@@ -106,37 +107,90 @@ def destiny_phone(
 
     Usage: palmeiras destiny-phone YOUR_TWILIO_DESTINY_PHONES
     """
-    chave = 'DESTINY_PHONE_NUMBER'
-    if not os.path.exists('teste.txt'):
-        with open('teste.txt', 'w') as arq:
+    chave = 'TWILIO_DESTINY_PHONE_NUMBER'
+    if not os.path.exists(env):
+        with open(env, 'w') as arq:
             arquivo = arq.write(' ')
 
-    with open('teste.txt', 'r+') as fr:
-        linhas = fr.readlines()
-        if not any(chave in linha for linha in linhas):
-            adicionar_linha(chave, phone)
+    with open(env, 'r+') as file:
+        linhas = file.readlines()
+        encontrado = False
 
-        else:
-            numeros_telefone = [
-                linha.split('=')[1].replace('"', '').strip()
-                for linha in linhas
-                if chave in linha
-            ]
-            for phone in phones:
-                if phone not in numeros_telefone[0]:
-                    numeros_telefone = f'{numeros_telefone[0]} {phone}'
-                    with open('teste.txt', 'w') as fw:
-                        for linha in linhas:
-                            if chave not in linha:
-                                fw.write(linha)
-                        else:
-                            fw.write(f'{chave}="{numeros_telefone}"')
+        for i, linha in enumerate(linhas):
+            if chave in linha:
+                linha = linha.rstrip('\n')
+                partes_linha = linha.split('"')
+                phones_agrupados = partes_linha[1]
+
+                twilio_phones_list = phones_agrupados.split()
+                phones_novos = [
+                    str(phone)
+                    for phone in phones
+                    if str(phone) not in twilio_phones_list
+                ]
+
+                phones_adicionados = []
+                for phone in phones_novos:
+                    if phone not in twilio_phones_list:
+                        twilio_phones_list.append(phone)
+                        phones_adicionados.append(phone)
+
+                if phones_adicionados:
+                    phones_agrupados = ' '.join(twilio_phones_list)
+                    linha = (
+                        f'{partes_linha[0]}"{phones_agrupados}"'
+                        f'{partes_linha[2]}\n'
+                    )
+                    print(partes_linha[2])
+                    linhas[i] = linha
+
+                for phone in phones_adicionados:
+                    console.log(f'{chave} {phone} adicionado com sucesso.')
+
+                for phone in phones:
+                    if str(phone) in twilio_phones_list:
+                        if (
+                            str(phone) in twilio_phones_list
+                            and str(phone) not in phones_adicionados
+                        ):
                             console.log(
-                                f'O número {phone} foi adicionada com sucesso!'
+                                f'O telefone {phone} já existe no arquivo.'
                             )
 
-                else:
-                    console.log(f'O número {phone} já está configurado.')
+                encontrado = True
+                break
+
+        if not encontrado:
+            linhas.append(f'{chave}="{" ".join(phones)}"\n')
+
+        file.seek(0)
+        file.writelines(linhas)
+    # with open(env, 'r+') as fr:
+    #     linhas = fr.readlines()
+    #     if not any(chave in linha for linha in linhas):
+    #         adicionar_linha(chave, ' '.join(phones))
+
+    #     else:
+    #         lista_phones = [
+    #             linha.split('=')[1].replace('"', '').strip()
+    #             for linha in linhas
+    #             if chave in linha
+    #         ]
+    #         for phone in phones:
+    #             if phone not in lista_phones[0]:
+    #                 lista_phones = f'{lista_phones[0]} {" ".join(phones)}'
+    #                 with open(env, 'w') as fw:
+    #                     for linha in linhas:
+    #                         if chave not in linha:
+    #                             fw.write(linha)
+    #                     else:
+    #                         fw.write(f'{chave}="{lista_phones}"')
+    #                         console.log(
+    #                             f'O número {phone} foi adicionada com sucesso!'
+    #                         )
+
+    #             else:
+    #                 console.log(f'O número {phone} já está configurado.')
 
 
 @cli.command('show')
@@ -144,7 +198,10 @@ def listar(
     destiny_phone: Annotated[
         bool,
         typer.Option(
-            help='Lista todos os números cadastrados para receber as mensagens;',
+            help=(
+                'Lista todos os números cadastrados '
+                'para receber as mensagens;'
+            ),
             show_default=False,
         ),
     ] = False,
@@ -158,14 +215,20 @@ def listar(
     twilio_phone: Annotated[
         bool,
         typer.Option(
-            help='Lista o TWILIO_PHONE_NUMBER configurado no arquivo de variável;',
+            help=(
+                'Lista o TWILIO_PHONE_NUMBER configurado '
+                'no arquivo de variável;'
+            ),
             show_default=False,
         ),
     ] = False,
     token: Annotated[
         bool,
         typer.Option(
-            help='Lista o TWILIO_TOKEN configurado no arquivo de variável;',
+            help=(
+                'Lista o TWILIO_AUTH_TOKEN configurado no '
+                'arquivo de variável;'
+            ),
             show_default=False,
         ),
     ] = False,
@@ -179,23 +242,23 @@ def listar(
         destiny_phone (Annotated[ bool, typer.Option, optional): _description_. Defaults to 'Lista todos os números cadastrados para receber as mensagens;', show_default=False, ), ]=False.
         sid (Annotated[ bool, typer.Option, optional): _description_. Defaults to 'Lista o SID configurado no arquivo de variável;', show_default=False, ), ]=False.
         twilio_phone (Annotated[ bool, typer.Option, optional): _description_. Defaults to 'Lista o TWILIO_PHONE_NUMBER configurado no arquivo de variável;', show_default=False, ), ]=False.
-        token (Annotated[ bool, typer.Option, optional): _description_. Defaults to 'Lista o TWILIO_TOKEN configurado no arquivo de variável;', show_default=False, ), ]=False.
+        token (Annotated[ bool, typer.Option, optional): _description_. Defaults to 'Lista o TWILIO_AUTH_TOKEN configurado no arquivo de variável;', show_default=False, ), ]=False.
     """
 
     option = {
-        destiny_phone: 'DESTINY_PHONE_NUMBER',
-        sid: 'TWILIO_SID',
+        destiny_phone: 'TWILIO_DESTINY_PHONE_NUMBER',
+        sid: 'TWILIO_ACCOUNT_SID',
         twilio_phone: 'TWILIO_PHONE_NUMBER',
-        token: 'TWILIO_TOKEN',
+        token: 'TWILIO_AUTH_TOKEN',
     }.get(True, None)
 
     if option is None:
-        with open('teste.txt', 'r') as fr:
+        with open(env, 'r') as fr:
             console.log(''.join(fr))
         return
 
     try:
-        with open('teste.txt', 'r') as fr:
+        with open(env, 'r') as fr:
             linhas = fr.readlines()
             valores = [linha for linha in linhas if option in linha]
             if valores:
@@ -226,12 +289,12 @@ def delete(
     Ex: palmeiras delete sid
     """
     option = {
-        'destiny_phone': 'DESTINY_PHONE_NUMBER',
-        'sid': 'TWILIO_SID',
+        'destiny_phone': 'TWILIO_DESTINY_PHONE_NUMBER',
+        'sid': 'TWILIO_ACCOUNT_SID',
         'twilio_phone': 'TWILIO_PHONE_NUMBER',
-        'token': 'TWILIO_TOKEN',
+        'token': 'TWILIO_AUTH_TOKEN',
     }
-    variaveis = open('teste.txt').read().split('\n')
+    variaveis = open(env).read().split('\n')
     for i, item in enumerate(variaveis):
         if option[variavel] in variaveis[i]:
             variaveis.remove(item)
@@ -239,7 +302,7 @@ def delete(
             return
     else:
         console.log(f'O arquivo não contém nenhum {option[variavel]}.')
-    open('teste.txt', 'w').write('\n'.join(variaveis))
+    open(env, 'w').write('\n'.join(variaveis))
 
 
 @cli.command()

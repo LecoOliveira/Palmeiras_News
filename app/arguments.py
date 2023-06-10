@@ -59,7 +59,7 @@ def link_jogo() -> str:
 
 
 @argument()
-def hora_jogo():
+def hora_jogo() -> str:
     """
     Busca a hora do próximo jogo dentro do site.
 

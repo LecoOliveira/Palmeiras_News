@@ -9,7 +9,7 @@ from app.conditions import data_igual
 from app.constants import HEADERS
 
 group = Grouper()
-hora_max = '20:00'  # f'{str(int(hora_jogo()[:2]) + 2)}:30'
+hora_max = f'{str(int(hora_jogo()[:2]) + 2)}:30'
 
 
 @group.task(

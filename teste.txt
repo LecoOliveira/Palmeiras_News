@@ -1,2 +1,0 @@
-TWILIO_TOKEN="vaivaiaviava"
-TWILIO_SID="vaivaiaviava"
