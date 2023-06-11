@@ -33,7 +33,7 @@ def adicionar_linha(chave: str, valor: str):
             console.log(f'{chave} adicionada com sucesso!\n')
         else:
             print()
-            console.log(f'{chave} já existente no arquivo.\n')
+            console.log(f'{chave} já existe no arquivo.\n')
 
 
 @cli.command()
@@ -279,8 +279,7 @@ def delete(
     }
     with open(env, 'r') as file:
         variaveis = file.readlines()
-        encontrado = False
-        
+
         for i, item in enumerate(variaveis):
             if option[variavel] in variaveis[i]:
                 variaveis.remove(item)
@@ -292,7 +291,6 @@ def delete(
         else:
             print()
             console.log(f'O arquivo não contém nenhum {option[variavel]}.\n')
-
 
 
 # if __name__ == '__main__':
