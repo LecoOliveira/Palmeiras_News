@@ -1,14 +1,23 @@
 import os
 import subprocess
+import time
 from typing import List
 
 import typer
 from rich.console import Console
+from rich.progress import track
 from typing_extensions import Annotated
 
 cli = typer.Typer(help='Interface para adição de variáveis de ambiente.')
 console = Console()
 env = '.env'
+
+
+def contador(time_: int = 0.02):
+    total = 0
+    for value in track(range(100), description="Configurando..."):
+        time.sleep(time_)
+        total += 1
 
 
 def adicionar_linha(chave: str, valor: str):
@@ -30,9 +39,11 @@ def adicionar_linha(chave: str, valor: str):
         if not any(chave in linha for linha in linhas):
             arquivo.write(f'{chave}="{valor}"\n')
             print()
+            contador()
             console.log(f'{chave} adicionada com sucesso!\n')
         else:
             print()
+            contador(0.001)
             console.log(f'{chave} já existe no arquivo.\n')
 
 
@@ -145,6 +156,7 @@ def destiny_phone(
 
                 for phone in phones_adicionados:
                     print()
+                    contador()
                     console.log(f'{chave} {phone} adicionado com sucesso.\n')
 
                 for phone in phones:
@@ -154,6 +166,7 @@ def destiny_phone(
                             and str(phone) not in phones_adicionados
                         ):
                             print()
+                            contador(0.001)
                             console.log(
                                 f'O telefone {phone} já existe no arquivo.\n'
                             )
@@ -164,6 +177,7 @@ def destiny_phone(
         if not encontrado:
             linhas.append(f'{chave}="{" ".join(phones)}"\n')
             print()
+            contador()
             console.log(
                 f'{chave} {" ".join(phones)} adicionado(s) com sucesso.\n'
             )
