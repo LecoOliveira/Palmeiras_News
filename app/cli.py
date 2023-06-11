@@ -106,7 +106,7 @@ def destiny_phone(
     phones: Annotated[
         List[str],
         typer.Argument(
-            help='Um ou mais lista_phones que deseja configurar '
+            help='Um ou mais destiny_phone que deseja configurar '
             '(números devem ser separados por espaço); '
             'Ex: +551199999999 +5511999999999',
             show_default=False,
