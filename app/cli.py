@@ -13,7 +13,7 @@ console = Console()
 env = '.env'
 
 
-def contador(time_: int = 0.02):
+def progress_bar(time_: int = 0.02):
     total = 0
     for value in track(range(100), description="Configurando..."):
         time.sleep(time_)
@@ -39,11 +39,11 @@ def adicionar_linha(chave: str, valor: str):
         if not any(chave in linha for linha in linhas):
             arquivo.write(f'{chave}="{valor}"\n')
             print()
-            contador()
+            progress_bar()
             console.log(f'{chave} adicionada com sucesso!\n')
         else:
             print()
-            contador(0.001)
+            progress_bar(0.001)
             console.log(f'{chave} já existe no arquivo.\n')
 
 
@@ -156,7 +156,7 @@ def destiny_phone(
 
                 for phone in phones_adicionados:
                     print()
-                    contador()
+                    progress_bar()
                     console.log(f'{chave} {phone} adicionado com sucesso.\n')
 
                 for phone in phones:
@@ -166,7 +166,7 @@ def destiny_phone(
                             and str(phone) not in phones_adicionados
                         ):
                             print()
-                            contador(0.001)
+                            progress_bar(0.001)
                             console.log(
                                 f'O telefone {phone} já existe no arquivo.\n'
                             )
@@ -177,7 +177,7 @@ def destiny_phone(
         if not encontrado:
             linhas.append(f'{chave}="{" ".join(phones)}"\n')
             print()
-            contador()
+            progress_bar()
             console.log(
                 f'{chave} {" ".join(phones)} adicionado(s) com sucesso.\n'
             )
@@ -298,12 +298,14 @@ def delete(
             if option[variavel] in variaveis[i]:
                 variaveis.remove(item)
                 print()
+                progress_bar()
                 console.log(f'{option[variavel]} removido com sucesso.\n')
                 with open(env, 'w') as fw:
                     arquivo = fw.write(''.join(variaveis))
                 return
         else:
             print()
+            progress_bar(0.001)
             console.log(f'O arquivo não contém nenhum {option[variavel]}.\n')
 
 
