@@ -15,12 +15,12 @@ env = '.env'
 
 def progress_bar(time_: int = 0.02):
     total = 0
-    for value in track(range(100), description="Configurando..."):
+    for value in track(range(100), description='Configurando...'):
         time.sleep(time_)
         total += 1
 
 
-def adicionar_linha(chave: str, valor: str):
+def adicionar_linha(chave: str, valor: List[str], env: str = env):
     """
     Função principal que adiciona os dados no arquivo de variável de ambiente.
 
@@ -31,20 +31,89 @@ def adicionar_linha(chave: str, valor: str):
         O resultado final ficará assim:
         ```CHAVE_DA_VARIAVEL="valor_da_variavel"```
     """
-    if not os.path.exists(env):
-        with open(env, 'w+') as arq:
-            arquivo = arq.write('')
-    with open(env, 'r+') as arquivo:
-        linhas = arquivo.readlines()
-        if not any(chave in linha for linha in linhas):
-            arquivo.write(f'{chave}="{valor}"\n')
-            print()
-            progress_bar()
-            console.log(f'{chave} adicionada com sucesso!\n')
-        else:
-            print()
-            progress_bar(0.001)
-            console.log(f'{chave} já existe no arquivo.\n')
+    if chave != 'TWILIO_DESTINY_PHONE_NUMBER':
+        if not os.path.exists(env):
+            with open(env, 'w+') as arq:
+                arquivo = arq.write('')
+        with open(env, 'r+') as arquivo:
+            linhas = arquivo.readlines()
+            if not any(chave in linha for linha in linhas):
+                arquivo.write(f'{chave}="{valor}"\n')
+                print()
+                progress_bar()
+                console.log(f'{chave} adicionada com sucesso!\n')
+            else:
+                print()
+                progress_bar(0.001)
+                console.log(f'{chave} já existe no arquivo.\n')
+    else:
+        if not os.path.exists(env):
+            with open(env, 'w') as arq:
+                arquivo = arq.write(' ')
+
+        with open(env, 'r+') as file:
+            linhas = file.readlines()
+            encontrado = False
+
+            for i, linha in enumerate(linhas):
+                if chave in linha:
+                    linha = linha.rstrip('\n')
+                    partes_linha = linha.split('"')
+                    phones_agrupados = partes_linha[1]
+
+                    twilio_phones_list = phones_agrupados.split()
+                    phones_novos = [
+                        str(phone)
+                        for phone in valor
+                        if str(phone) not in twilio_phones_list
+                    ]
+
+                    phones_adicionados = []
+                    for phone in phones_novos:
+                        if phone not in twilio_phones_list:
+                            twilio_phones_list.append(phone)
+                            phones_adicionados.append(phone)
+
+                    if phones_adicionados:
+                        phones_agrupados = ' '.join(twilio_phones_list)
+                        linha = (
+                            f'{partes_linha[0]}"{phones_agrupados}"'
+                            f'{partes_linha[2]}\n'
+                        )
+                        linhas[i] = linha
+
+                    for phone in phones_adicionados:
+                        print()
+                        progress_bar()
+                        console.log(
+                            f'{chave} {phone} adicionado com sucesso.\n'
+                        )
+
+                    for phone in valor:
+                        if str(phone) in twilio_phones_list:
+                            if (
+                                str(phone) in twilio_phones_list
+                                and str(phone) not in phones_adicionados
+                            ):
+                                print()
+                                progress_bar(0.001)
+                                console.log(
+                                    f'O telefone {phone} já existe no arquivo.\n'
+                                )
+
+                    encontrado = True
+                    break
+
+            if not encontrado:
+                linhas.append(f'{chave}="{" ".join(valor)}"\n')
+                print()
+                progress_bar()
+                console.log(
+                    f'{chave} {" ".join(valor)} adicionado(s) com sucesso.\n'
+                )
+
+            file.seek(0)
+            file.writelines(linhas)
 
 
 @cli.command()
@@ -55,14 +124,20 @@ def sid(
             help='Seu SID gerado ao efetuar cadastro na Twilio',
             show_default=False,
         ),
-    ]
+    ],
+    env: Annotated[
+        str,
+        typer.Argument(
+            help='Arquivo que será armazenada a variável de ambiente'
+        ),
+    ] = env,
 ):
     """
     Adiciona o SID da conta Twilio na variável de ambiente;
 
     Usage: palmeiras sid YOUR_TWILIO_ACCOUNT_SID
     """
-    adicionar_linha('TWILIO_ACCOUNT_SID', sid)
+    adicionar_linha('TWILIO_ACCOUNT_SID', sid, env)
 
 
 @cli.command()
@@ -111,79 +186,20 @@ def destiny_phone(
             'Ex: +551199999999 +5511999999999',
             show_default=False,
         ),
-    ]
+    ],
+    env: Annotated[
+        str,
+        typer.Option(
+            help='Arquivo que será armazenada a variável de ambiente'
+        ),
+    ] = env,
 ):
     """
     Adiciona números de destino para onde serão enviadas as mensagens;
 
     Usage: palmeiras destiny-phone YOUR_TWILIO_DESTINY_PHONES
     """
-    chave = 'TWILIO_DESTINY_PHONE_NUMBER'
-    if not os.path.exists(env):
-        with open(env, 'w') as arq:
-            arquivo = arq.write(' ')
-
-    with open(env, 'r+') as file:
-        linhas = file.readlines()
-        encontrado = False
-
-        for i, linha in enumerate(linhas):
-            if chave in linha:
-                linha = linha.rstrip('\n')
-                partes_linha = linha.split('"')
-                phones_agrupados = partes_linha[1]
-
-                twilio_phones_list = phones_agrupados.split()
-                phones_novos = [
-                    str(phone)
-                    for phone in phones
-                    if str(phone) not in twilio_phones_list
-                ]
-
-                phones_adicionados = []
-                for phone in phones_novos:
-                    if phone not in twilio_phones_list:
-                        twilio_phones_list.append(phone)
-                        phones_adicionados.append(phone)
-
-                if phones_adicionados:
-                    phones_agrupados = ' '.join(twilio_phones_list)
-                    linha = (
-                        f'{partes_linha[0]}"{phones_agrupados}"'
-                        f'{partes_linha[2]}\n'
-                    )
-                    linhas[i] = linha
-
-                for phone in phones_adicionados:
-                    print()
-                    progress_bar()
-                    console.log(f'{chave} {phone} adicionado com sucesso.\n')
-
-                for phone in phones:
-                    if str(phone) in twilio_phones_list:
-                        if (
-                            str(phone) in twilio_phones_list
-                            and str(phone) not in phones_adicionados
-                        ):
-                            print()
-                            progress_bar(0.001)
-                            console.log(
-                                f'O telefone {phone} já existe no arquivo.\n'
-                            )
-
-                encontrado = True
-                break
-
-        if not encontrado:
-            linhas.append(f'{chave}="{" ".join(phones)}"\n')
-            print()
-            progress_bar()
-            console.log(
-                f'{chave} {" ".join(phones)} adicionado(s) com sucesso.\n'
-            )
-
-        file.seek(0)
-        file.writelines(linhas)
+    adicionar_linha('TWILIO_DESTINY_PHONE_NUMBER', phones, env)
 
 
 @cli.command('show')
@@ -307,7 +323,3 @@ def delete(
             print()
             progress_bar(0.001)
             console.log(f'O arquivo não contém nenhum {option[variavel]}.\n')
-
-
-# if __name__ == '__main__':
-#     cli()
