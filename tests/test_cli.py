@@ -40,6 +40,22 @@ def test_listar_deve_retornar_todas_as_variaveis_cadastradas():
     assert 'TWILIO_' in result.stdout
 
 
+def test_listar_deve_retornar_mensagem_de_erro_ao_ler_arquivo():
+    result = runner.invoke(cli, ['show', '--sid', '--env', 'test_file.txt'])
+    assert result.exit_code == 0
+    assert 'Erro ao ler o arquivo' in result.stdout
+
+
+def test_listar_deve_retornar_mensagem_de_erro_ao_nao_identificar_a_variavel():
+    with open('temp_file.txt', 'w'):
+        result = runner.invoke(
+            cli, ['show', '--sid', '--env', 'temp_file.txt']
+        )
+        assert result.exit_code == 0
+        assert 'Nenhuma variável de ambiente' in result.stdout
+        os.remove('temp_file.txt')
+
+
 # destiny_phone tests ----------------------------------------------
 
 
@@ -85,3 +101,24 @@ def test_twilio_phone_ja_contem_no_arquivo():
     result = runner.invoke(cli, ['twilio-phone', 'teste'])
     assert result.exit_code == 0
     assert 'já existe no arquivo' in result.stdout
+
+
+# delete tests -----------------------------------------------------
+
+
+def test_delete_exclui_variavel():
+    with open('temp_file.txt', 'w') as file:
+        file.write('TWILIO_ACCOUNT_SID="teste"')
+    result = runner.invoke(cli, ['delete', 'sid', '--env', 'temp_file.txt'])
+    assert result.exit_code == 0
+    assert 'TWILIO_ACCOUNT_SID' in result.stdout
+    os.remove('temp_file.txt')
+
+
+def test_delete_nao_encontra_variavel():
+    file = open('temp_file.txt', 'w')
+    result = runner.invoke(cli, ['delete', 'sid', '--env', 'temp_file.txt'])
+    assert result.exit_code == 0
+    assert 'O arquivo não contém nenhum' in result.stdout
+    file.close()
+    os.remove('temp_file.txt')

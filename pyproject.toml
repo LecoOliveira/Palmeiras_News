@@ -8,9 +8,11 @@ packages = [
     { include = "app" }
 ]
 
+
 [tool.poetry.scripts]
 palmeiras = "app.cli:cli"
 palmeiras-run = "app.main:app.run()"
+
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -39,17 +41,21 @@ mkdocs-bootswatch = "^1.1"
 mkdocs-material = "^9.1.12"
 pymdown-extensions = "^10.0.1"
 
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
 
 [tool.pytest.ini_options]
 pythonpath = "."
 addopts = "--doctest-modules"
 
+
 [tool.isort]
 profile = "black"
 line_length = 79
+
 
 [tool.taskipy.tasks]
 lint = "blue --check --diff . && isort --check --diff ."

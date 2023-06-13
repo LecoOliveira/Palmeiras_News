@@ -19,18 +19,11 @@ def test_data_jogo_retorna_uma_data():
     assert data_regex.match(data_jogo())
 
 
-def test_data_igual_deve_retornar_false_ou_true():
+def test_data_igual_deve_retornar_um_dado_booleano():
     cond = data_igual()
     assert isinstance(cond.observe(), bool)
 
 
-def test_data_igual_deve_retornar_false():
+def test_data_igual_deve_retornar_false_ou_true_dependendo_do_data_igual():
     cond = data_igual()
-    if data_hoje() != data_jogo():
-        assert cond.observe() == False
-
-
-def test_data_igual_deve_retornar_true():
-    cond = data_igual()
-    if data_hoje() == data_jogo():
-        assert cond.observe() == True
+    assert cond.observe() == False if data_hoje() != data_jogo() else True

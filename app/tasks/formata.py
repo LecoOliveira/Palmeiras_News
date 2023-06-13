@@ -39,5 +39,3 @@ def formata_texto(texto: str = Return(texto_msg)) -> str:
             f'{local}\n{transmissao}\n{arbitro}\n\n'
             f'{escalacao}\n\n{pendurados}\n\n{suspensos}\n\n{desfalques}'
         )
-    else:
-        pass
