@@ -241,6 +241,10 @@ def listar(
             show_default=False,
         ),
     ] = False,
+    env: Annotated[
+        str,
+        typer.Option(help='Arquivo de onde será lido a variável de ambiente'),
+    ] = env,
 ):
     """
     Lista todas as variáveis de ambiente cadastradas;
@@ -294,7 +298,11 @@ def delete(
             help='Variável qeu será excluída',
             show_default=False,
         ),
-    ]
+    ],
+    env: Annotated[
+        str,
+        typer.Option(help='Arquivo de onde a função vai deletar a variável'),
+    ] = env,
 ):
     """
     Exclui uma das configurações do arquivo de variável de ambiente.
