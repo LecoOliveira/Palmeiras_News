@@ -1,3 +1,4 @@
+import logging
 from os import getenv
 
 from dotenv import load_dotenv
@@ -36,7 +37,9 @@ def enviar_msg(texto: str = Return(formata_texto)) -> str:
             message = CLIENT.messages.create(
                 body=texto, from_=PHONE_NUMBER, to=destiny_phone
             )
-            return message.sid
 
     except TwilioRestException as erro:
-        print(erro)
+        logging.error(f'Oh no: {erro}')
+        return
+
+    return message.sid
