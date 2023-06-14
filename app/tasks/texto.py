@@ -18,12 +18,12 @@ hora_max = f'{str(int(hora_jogo()[:2]) + 2)}:30'
 )
 def texto_msg(link: str = link_jogo) -> str:
     """
-    Função que faz o webscraping no corpo do site.
+    Função que faz o webscraping no corpo do site e captura o texto que será enviado na mensagem.
 
-    Args:
-        link (str): link de onde será buscado o texto. Parâmetro retornado de Arg('link').
+    Args: Argumentos:
+        link (str): link de onde será buscado o texto. Parâmetro retornado da função link_jogo().
 
-    Returns:
+    Returns: Retorna:
         str: Retorna o texto não formatado com os dados da partida.
     """
 

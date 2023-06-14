@@ -1,6 +1,7 @@
 import os
 import subprocess
 import time
+from re import compile
 from typing import List
 
 import typer
@@ -8,14 +9,17 @@ from rich.console import Console
 from rich.progress import track
 from typing_extensions import Annotated
 
-cli = typer.Typer(help='Interface para adição de variáveis de ambiente.')
+cli = typer.Typer(
+    help='Interface para configuração de variáveis '
+    'de ambiente que serão usadas no Palmeiras_news.'
+)
 console = Console()
 env = '.env'
 
 
-def progress_bar(time_: int = 0.02):
+def progress_bar(time_: int = 0.02, description: str = 'Configurando...'):
     total = 0
-    for value in track(range(100), description='Configurando...'):
+    for value in track(range(100), description=description):
         time.sleep(time_)
         total += 1
 
@@ -26,8 +30,9 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
 
     Args:
         chave (str): Recebe a chave da variável a ser criada.
-        valor (str): Recebe o valor da chave criada.
-    Ex:
+        valor (List[str]): Recebe o valor da chave criada.
+        env (str): Recebe o arquivo que será configurada a variável de ambiente.
+    Exemplo:
         O resultado final ficará assim:
         ```CHAVE_DA_VARIAVEL="valor_da_variavel"```
     """
@@ -41,7 +46,7 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
                 arquivo.write(f'{chave}="{valor}"\n')
                 print()
                 progress_bar()
-                console.log(f'{chave} adicionada com sucesso!\n')
+                console.log(f'{chave} configurado com sucesso!\n')
             else:
                 print()
                 progress_bar(0.001)
@@ -86,7 +91,7 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
                         print()
                         progress_bar()
                         console.log(
-                            f'{chave} {phone} adicionado com sucesso.\n'
+                            f'{chave} {phone} configurado com sucesso.\n'
                         )
 
                     for phone in valor:
@@ -109,14 +114,14 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
                 print()
                 progress_bar()
                 console.log(
-                    f'{chave} {" ".join(valor)} adicionado(s) com sucesso.\n'
+                    f'{chave} {" ".join(valor)} configurado(s) com sucesso.\n'
                 )
 
             file.seek(0)
             file.writelines(linhas)
 
 
-@cli.command()
+@cli.command(help='Adiciona o SID da conta Twilio na variável de ambiente.')
 def sid(
     sid: Annotated[
         str,
@@ -127,7 +132,7 @@ def sid(
     ],
     env: Annotated[
         str,
-        typer.Argument(
+        typer.Option(
             help='Arquivo que será armazenada a variável de ambiente'
         ),
     ] = env,
@@ -135,12 +140,16 @@ def sid(
     """
     Adiciona o SID da conta Twilio na variável de ambiente;
 
-    Usage: palmeiras sid YOUR_TWILIO_ACCOUNT_SID
+    Comando: `palmeiras sid YOUR_TWILIO_ACCOUNT_SID`
+
+    Args: Argumentos:
+        sid (str): Seu SID gerado ao efetuar cadastro na Twilio.
+        env (str): Arquivo que será armazenada a variável de ambiente.
     """
     adicionar_linha('TWILIO_ACCOUNT_SID', sid, env)
 
 
-@cli.command()
+@cli.command(help='Adiciona o TOKEN da conta Twilio na variável de ambiente.')
 def token(
     token: Annotated[
         str,
@@ -148,17 +157,29 @@ def token(
             help='Token gerado ao efetuar cadastro na Twilio',
             show_default=False,
         ),
-    ]
+    ],
+    env: Annotated[
+        str,
+        typer.Option(
+            help='Arquivo onde será armazenada a variável de ambiente.'
+        ),
+    ] = env,
 ):
     """
     Adiciona o TOKEN da conta Twilio na variável de ambiente;
 
-    Usage: palmeiras token YOUR_TWILIO_AUTH_TOKEN
+    Comando: `palmeiras token YOUR_TWILIO_AUTH_TOKEN`
+
+    Args: Argumentos:
+        token (str): Token gerado ao efetuar cadastro na Twilio.
+        env (str): Arquivo onde será armazenada a variável de ambiente.
     """
     adicionar_linha('TWILIO_AUTH_TOKEN', token)
 
 
-@cli.command()
+@cli.command(
+    help='Adiciona o seu PHONE_NUMBER da conta Twilio na variável de ambiente.'
+)
 def twilio_phone(
     phone: Annotated[
         str,
@@ -166,17 +187,29 @@ def twilio_phone(
             help='Número americano gerado pela Twilio',
             show_default=False,
         ),
-    ]
+    ],
+    env: Annotated[
+        str,
+        typer.Option(
+            help='Arquivo onde será configurado o TWILIO_PHONE_NUMBER.'
+        ),
+    ],
 ):
     """
     Adiciona o seu PHONE_NUMBER da conta Twilio na variável de ambiente;
 
-    Usage: palmeiras twilio-phone YOUR_TWILIO_PHONE
+    Comando: `palmeiras twilio-phone YOUR_TWILIO_PHONE`
+
+    Args: Argumentos:
+        phone (str): Número americano gerado pela Twilio.
+        env (str): Arquivo onde será configurado o TWILIO_PHONE_NUMBER.
     """
-    adicionar_linha('TWILIO_PHONE_NUMBER', phone)
+    adicionar_linha('TWILIO_PHONE_NUMBER', phone, env)
 
 
-@cli.command()
+@cli.command(
+    help='Adiciona números de destino para onde serão enviadas as mensagens.'
+)
 def destiny_phone(
     phones: Annotated[
         List[str],
@@ -197,18 +230,41 @@ def destiny_phone(
     """
     Adiciona números de destino para onde serão enviadas as mensagens;
 
-    Usage: palmeiras destiny-phone YOUR_TWILIO_DESTINY_PHONES
+    Comando: `palmeiras destiny-phone YOUR_TWILIO_DESTINY_PHONES`
+
+    Args: Argumentos:
+        phones (List[str]): Um ou mais telefones que deseja configurar para que possam receber as mensagens (números devem ser separados por espaço) Ex: +551199999999 +5511999999999.
+        env (str): Arquivo que será armazenada a variável de ambiente.
     """
-    adicionar_linha('TWILIO_DESTINY_PHONE_NUMBER', phones, env)
+    padrao = compile(r'^\+\d{2,3}\d{2}\d{4,5}\d{4}$')
+
+    numeros_validos = [
+        phone for i, phone in enumerate(phones) if padrao.match(phones[i])
+    ]
+    numeros_invalidos = [
+        phone for i, phone in enumerate(phones) if not padrao.match(phones[i])
+    ]
+
+    if numeros_invalidos:
+        console.log(
+            f'Número(s) {" ".join(numeros_invalidos)} inválido(s). '
+            'O número deve conter o formato +xxxxxxxxxxxxx '
+            '(Começando com o sinal "+" e ter entre 12 e 14 números).'
+        )
+        return
+
+    adicionar_linha('TWILIO_DESTINY_PHONE_NUMBER', numeros_validos, env)
 
 
-@cli.command('show')
+@cli.command(
+    'show', help=('Lista todas as variáveis de ambiente cadastradas;')
+)
 def listar(
     destiny_phone: Annotated[
         bool,
         typer.Option(
             help=(
-                'Lista todos os números cadastrados '
+                'Lista todos os TWILIO_DESTINY_PHONE_NUMBER cadastrados '
                 'para receber as mensagens;'
             ),
             show_default=False,
@@ -217,7 +273,7 @@ def listar(
     sid: Annotated[
         bool,
         typer.Option(
-            help='Lista o SID configurado no arquivo de variável;',
+            help='Lista o TWILIO_ACCOUNT_SID configurado no arquivo de variável;',
             show_default=False,
         ),
     ] = False,
@@ -248,14 +304,22 @@ def listar(
 ):
     """
     Lista todas as variáveis de ambiente cadastradas;
-    Usage: palmeiras show --phone;
-    Options: --phone, --destiny-phone, --sid, --twilio-phone;
 
-    Args:
-        destiny_phone (Annotated[ bool, typer.Option, optional): _description_. Defaults to 'Lista todos os números cadastrados para receber as mensagens;', show_default=False, ), ]=False.
-        sid (Annotated[ bool, typer.Option, optional): _description_. Defaults to 'Lista o SID configurado no arquivo de variável;', show_default=False, ), ]=False.
-        twilio_phone (Annotated[ bool, typer.Option, optional): _description_. Defaults to 'Lista o TWILIO_PHONE_NUMBER configurado no arquivo de variável;', show_default=False, ), ]=False.
-        token (Annotated[ bool, typer.Option, optional): _description_. Defaults to 'Lista o TWILIO_AUTH_TOKEN configurado no arquivo de variável;', show_default=False, ), ]=False.
+    Exemplo:
+        ```bash
+        palmeiras show --sid
+
+        [11:41:16] TWILIO_ACCOUNT_SID="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ```
+
+    Opções: `--token, --destiny-phone, --sid, --twilio-phone`
+
+    Args: Argumentos:
+        destiny_phone (bool): Lista todos os números cadastrados para receber as mensagens.
+        sid (bool): Lista o SID configurado no arquivo de variável.
+        twilio_phone (bool): Lista o TWILIO_PHONE_NUMBER configurado no arquivo de variável.
+        token (bool): Lista o TWILIO_AUTH_TOKEN configurado no arquivo de variável.
+        env (str): Arquivo de onde buscar as variáveis.
     """
 
     option = {
@@ -295,7 +359,7 @@ def delete(
     variavel: Annotated[
         str,
         typer.Argument(
-            help='Variável qeu será excluída',
+            help='Variável que será excluída',
             show_default=False,
         ),
     ],
@@ -305,9 +369,13 @@ def delete(
     ] = env,
 ):
     """
-    Exclui uma das configurações do arquivo de variável de ambiente.
+    Comando do CLI que deleta uma variável de ambiente do arquivo.
 
-    Ex: palmeiras delete sid
+    Comando: `palmeiras delete VARIÁVEL_QUE_DESEJA_EXCLUIR`
+
+    Args: Argumentos:
+        variavel (str): Variável que será excluída.
+        env (str): Arquivo de onde a função vai deletar a variável.
     """
     option = {
         'destiny_phone': 'TWILIO_DESTINY_PHONE_NUMBER',
@@ -322,12 +390,12 @@ def delete(
             if option[variavel] in variaveis[i]:
                 variaveis.remove(item)
                 print()
-                progress_bar()
+                progress_bar(description='Removendo...')
                 console.log(f'{option[variavel]} removido com sucesso.\n')
                 with open(env, 'w') as fw:
                     arquivo = fw.write(''.join(variaveis))
                 return
         else:
             print()
-            progress_bar(0.001)
+            progress_bar(0.001, description='Removendo...')
             console.log(f'O arquivo não contém nenhum {option[variavel]}.\n')

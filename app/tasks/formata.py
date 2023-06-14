@@ -10,13 +10,13 @@ group = Grouper()
 @group.task(after_success(texto_msg))
 def formata_texto(texto: str = Return(texto_msg)) -> str:
     """
-    Formata o texto vindo da função 'texto_msg()'
+    Formata o texto vindo da função texto_msg().
 
-    Args:
-        texto (str): Texto a ser formatado retornado de: Return(texto_msg).
+    Args: Argumentos:
+        texto (str): Texto a ser formatado.
 
-    Returns:
-        str: Texto pronto para ser enviado na função 'enviar_msg()'.
+    Returns: Retorna:
+        str: Texto pronto para ser enviado na função enviar_msg().
     """
     texto = str(texto)
 
