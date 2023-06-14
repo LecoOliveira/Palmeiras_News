@@ -10,8 +10,8 @@ def data_igual(data: str = data_hoje, data_jogo: str = data_jogo) -> bool:
     a saída dela determina se a próxima função roda ou não dentro das nossas tarefas.
 
     Args:
-        data (str): Dia atual. Parâmetro importado de ```app_teste.arguments.data_hoje```.
-        data_jogo (str): Data do próximo jogo. Parâmetro importado de ```app_teste.arguments.data_hoje```.
+        data (str): Dia atual. Parâmetro retornado de `data_hoje()`.
+        data_jogo (str): Data do próximo jogo. Parâmetro retornado de `data_jogo()`.
 
     Returns:
         bool: True ou False
