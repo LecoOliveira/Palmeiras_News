@@ -17,7 +17,7 @@ console = Console()
 env = '.env'
 
 
-def progress_bar(time_: int = 0.02, description: str = 'Configurando...'):
+def progress_bar(time_: float = 0.02, description: str = 'Configurando...'):
     total = 0
     for value in track(range(100), description=description):
         time.sleep(time_)
