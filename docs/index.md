@@ -15,6 +15,7 @@ Palmeiras news é um script que realiza uma raspagem (webscraping) no site do Pa
 $ pipx install palmeiras-news
 
 ---> 100%
+palmeiras-news instalado com sucesso
 ```
 
 </div>
