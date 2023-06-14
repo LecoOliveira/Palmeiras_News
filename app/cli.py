@@ -49,8 +49,10 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
                 console.log(f'{chave} configurado com sucesso!\n')
             else:
                 print()
-                progress_bar(0.001)
-                console.log(f'{chave} já existe no arquivo.\n')
+                progress_bar(0)
+                console.log(
+                    f'{chave} [b][red]já existe[/red][/b] no arquivo.\n'
+                )
     else:
         if not os.path.exists(env):
             with open(env, 'w') as arq:
@@ -121,7 +123,7 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
             file.writelines(linhas)
 
 
-@cli.command(help='Adiciona o SID da conta Twilio na variável de ambiente.')
+@cli.command(help='Configura o SID Twilio na variável de ambiente.')
 def sid(
     sid: Annotated[
         str,
@@ -174,12 +176,10 @@ def token(
         token (str): Token gerado ao efetuar cadastro na Twilio.
         env (str): Arquivo onde será armazenada a variável de ambiente.
     """
-    adicionar_linha('TWILIO_AUTH_TOKEN', token)
+    adicionar_linha('TWILIO_AUTH_TOKEN', token, env)
 
 
-@cli.command(
-    help='Adiciona o seu PHONE_NUMBER da conta Twilio na variável de ambiente.'
-)
+@cli.command(help='Configura o TWILIO_PHONE_NUMBER na variável de ambiente.')
 def twilio_phone(
     phone: Annotated[
         str,
@@ -193,7 +193,7 @@ def twilio_phone(
         typer.Option(
             help='Arquivo onde será configurado o TWILIO_PHONE_NUMBER.'
         ),
-    ],
+    ] = env,
 ):
     """
     Adiciona o seu PHONE_NUMBER da conta Twilio na variável de ambiente;
@@ -207,9 +207,7 @@ def twilio_phone(
     adicionar_linha('TWILIO_PHONE_NUMBER', phone, env)
 
 
-@cli.command(
-    help='Adiciona números de destino para onde serão enviadas as mensagens.'
-)
+@cli.command(help='Adiciona números para onde serão enviadas as mensagens.')
 def destiny_phone(
     phones: Annotated[
         List[str],
@@ -233,7 +231,8 @@ def destiny_phone(
     Comando: `palmeiras destiny-phone YOUR_TWILIO_DESTINY_PHONES`
 
     Args: Argumentos:
-        phones (List[str]): Um ou mais telefones que deseja configurar para que possam receber as mensagens (números devem ser separados por espaço) Ex: +551199999999 +5511999999999.
+        phones (List[str]): Um ou mais telefones que deseja configurar para que
+        possam receber as mensagens (números devem ser separados por espaço) Ex: +551199999999 +5511999999999.
         env (str): Arquivo que será armazenada a variável de ambiente.
     """
     padrao = compile(r'^\+\d{2,3}\d{2}\d{4,5}\d{4}$')
@@ -354,7 +353,7 @@ def listar(
         console.log('Erro ao ler o arquivo.\n')
 
 
-@cli.command()
+@cli.command(help='Comando que deleta uma variável de ambiente do arquivo.')
 def delete(
     variavel: Annotated[
         str,
