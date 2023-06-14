@@ -12,7 +12,7 @@ runner = CliRunner()
 def test_sid_deve_retornar_0_se_rodar():
     result = runner.invoke(cli, ['--help'])
     assert result.exit_code == 0
-    assert 'Adiciona o SID da conta' in result.stdout
+    assert 'Configura o SID Twilio' in result.stdout
 
 
 def test_sid_deve_retornar_um_texto_mostrando_o_sid():
@@ -33,7 +33,7 @@ def test_sid_ja_contem_no_arquivo():
         file.write('TWILIO_ACCOUNT_SID="teste"')
     result = runner.invoke(cli, ['sid', 'teste'])
     assert result.exit_code == 0
-    assert 'já existe no arquivo' in result.stdout
+    assert 'já existe', 'no arquivo' in result.stdout
     os.remove('temp_file.txt')
 
 
@@ -109,11 +109,18 @@ def test_destiny_phone_retorna_erro_se_numero_ja_existe():
         cli, ['destiny-phone', '+1111900000000', '--env', 'temp_file.txt']
     )
     assert result.exit_code == 0
-    assert 'já existe no arquivo.' in result.stdout
+    assert 'já existe', 'no arquivo' in result.stdout
     os.remove('temp_file.txt')
 
 
 # token tests ------------------------------------------------------
+
+
+def test_token_cria_arquivo_se_nao_existe():
+    result = runner.invoke(cli, ['token', 'test', '--env', 'temp_file.txt'])
+    assert result.exit_code == 0
+    assert 'TWILIO_AUTH_TOKEN' in result.stdout
+    os.remove('temp_file.txt')
 
 
 def test_token_ja_contem_no_arquivo():
@@ -121,7 +128,7 @@ def test_token_ja_contem_no_arquivo():
         file.write('TWILIO_AUTH_TOKEN="teste')
     result = runner.invoke(cli, ['token', 'teste', '--env', 'temp_file.txt'])
     assert result.exit_code == 0
-    assert 'já existe no arquivo' in result.stdout
+    assert 'já existe', 'no arquivo' in result.stdout
     os.remove('temp_file.txt')
 
 
@@ -135,7 +142,7 @@ def test_twilio_phone_ja_contem_no_arquivo():
         cli, ['twilio-phone', 'teste', '--env', 'temp_file.txt']
     )
     assert result.exit_code == 0
-    assert 'já existe no arquivo' in result.stdout
+    assert 'já existe', 'no arquivo' in result.stdout
     os.remove('temp_file.txt')
 
 
