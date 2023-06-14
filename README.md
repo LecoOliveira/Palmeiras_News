@@ -1,5 +1,5 @@
 <div align="center">
-    <img class="logo" src="docs/assets/palmeiras_news.png" width="50%">
+    <img class="logo" src="docs/assets/palmeiras_news.png" width="30%">
 </div>
 <p align="center">
     <em>Um projeto para estudo e aprendizado de Python e suas bibliotecas</em>
