@@ -13,7 +13,7 @@ Basta se cadastrar no site oficial, e você terá acesso aos tokens e números n
 
 ### **Inserindo credenciais**
 
-Com as credenciais em mãos, é hora de inseri-las no código. Elas estão representadas pelas constantes: `ACCOUNT_SID, AUTH_TOKEN, PHONE_NUMBER, DESTINY_PHONE_NUMBER` dentro da função [`enviar_msg()`](../API/functions.md).
+Com as credenciais em mãos, é hora de inseri-las no código. Elas estão representadas pelas constantes: `ACCOUNT_SID, AUTH_TOKEN, PHONE_NUMBER, DESTINY_PHONE_NUMBER` dentro da função [`enviar_msg()`](/API/tasks/#tasks.envia.enviar_msg).
 
 ```python title="app/functions.py"
 load_dotenv('/PATH/TO/twilio.env') # Altere para o caminho completo do seu arquivo twilio.env

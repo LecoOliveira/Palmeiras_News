@@ -1,4 +1,24 @@
-![logo do palmeiras](./assets/palmeiras2.png){width="200".center}
-# Palmeiras news
+<img src="./assets/palmeiras_news.png" width="50%">
+<p align="center">
+    <em>Um projeto para estudo e aprendizado de Python e suas bibliotecas</em>
+</p>
+<style>
+    img {display: block; margin: auto;},
+    .legenda {display: block; margin: auto;},
+</style>
 
-Esse projeto é uma verdadeira representação de unir o útil ao agradável. Testando meus conhecimentos e aprendendo mais sobre Python ao mesmo tempo que tenho informações sobre meu time do coração.
+---
+
+Palmeiras news é um script que realiza uma raspagem (webscraping) no site do Palmeiras, e envia as informações do próximo jogo por SMS utilizando o <a href="https://www.twilio.com/pt-br" target="_blank">Twilio</a>.
+
+## Instalação
+
+<div class="termy">
+
+```bash
+$ pipx install palmeiras-news
+
+---> 100%
+```
+
+</div>

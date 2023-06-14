@@ -1,12 +1,15 @@
 site_name: Palmeiras news
 
 nav:
-    - Home: index.md
+    - Home: 
+        - Palmeiras news : index.md
     - Usage: 
         - Usage/variaveis.md
         - Usage/listar.md
     - API:
+        - API/tasks.md
         - API/arguments.md
+        - API/cli.md
 
 repo_url: https://github.com/LecoOliveira/Palmeiras_News
 repo_name: LecoOliveira/Palmeiras_News
@@ -24,17 +27,14 @@ theme:
     - navigation.path
     name: material
     language : pt-BR
-    logo: ./assets/escudo-palmeiras-6.png
-    favicon: ./assets/palmeiras2.png
+    logo: assets/escudo-palmeiras-6.png
+    favicon: assets/palmeiras2.png
 
 markdown_extensions:
     - attr_list
     - pymdownx.blocks.admonition
     - pymdownx.superfences
     - pymdownx.highlight
-  
-extra_css:
-    - stylesheet/extra.css
 
 extra:
     social:
@@ -53,3 +53,9 @@ plugins:
         options:
           docstring_style: google
         paths: [app]
+
+extra_css: 
+- stylesheet/termynal.css
+extra_javascript:
+- js/termynal.js
+- js/custom.js
