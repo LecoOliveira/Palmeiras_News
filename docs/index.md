@@ -1,11 +1,11 @@
-<img src="./assets/palmeiras_news.png" width="50%">
-<p align="center">
-    <em>Um projeto para estudo e aprendizado de Python e suas bibliotecas</em>
-</p>
 <style>
     img {display: block; margin: auto;},
     .legenda {display: block; margin: auto;},
 </style>
+<img src="./assets/palmeiras_news.png" width="50%">
+<p align="center">
+    <em>Um projeto para estudo e aprendizado de Python e suas bibliotecas</em>
+</p>
 
 ---
 
