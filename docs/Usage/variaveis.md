@@ -10,12 +10,54 @@ Basta se cadastrar no site oficial, e você terá acesso aos tokens e números n
 ![Imagem Twilio](../assets/imagen_twilio.png)
 
 ---
+### **Conhecendo o aplicativo**
+
+Para começar a usar, logo de cara você ja pode usar o comando `--help` para receber uma introdução:
+<sub>
+<div class="termy">
+
+```bash
+$ palmeiras --help
+// testando
+ Usage: palmeiras [OPTIONS] COMMAND [ARGS]...                             
+                                                                          
+ Interface para configuração de variáveis de ambiente que serão usadas no 
+ Palmeiras_news.                                                          
+                                                                          
+╭─ Options ──────────────────────────────────────────────────────────────╮
+│ --install-completion        [bash|zsh|fish|powe  Install completion    │
+│                             rshell|pwsh]         for the specified     │
+│                                                  shell.                │
+│                                                  [default: None]       │
+│ --show-completion           [bash|zsh|fish|powe  Show completion for   │
+│                             rshell|pwsh]         the specified shell,  │
+│                                                  to copy it or         │
+│                                                  customize the         │
+│                                                  installation.         │
+│                                                  [default: None]       │
+│ --help                                           Show this message and │
+│                                                  exit.                 │
+╰────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ─────────────────────────────────────────────────────────────╮
+│ delete         Comando que deleta uma variável de ambiente do arquivo. │
+│ destiny-phone  Adiciona números para onde serão enviadas as mensagens. │
+│ listar         Lista todas as variáveis de ambiente cadastradas;       │
+│ sid            Configura o SID Twilio na variável de ambiente.         │
+│ token          Adiciona o TOKEN da conta Twilio na variável de         │
+│                ambiente.                                               │
+│ twilio-phone   Configura o TWILIO_PHONE_NUMBER na variável de          │
+│                ambiente.                                               │
+╰────────────────────────────────────────────────────────────────────────╯
+```
+</div>
+
+</sub>
 
 ### **Inserindo credenciais**
 
 Com as credenciais em mãos, é hora de inseri-las no código. Elas estão representadas pelas constantes: `ACCOUNT_SID, AUTH_TOKEN, PHONE_NUMBER, DESTINY_PHONE_NUMBER` dentro da função [`enviar_msg()`](/API/tasks/#tasks.envia.enviar_msg).
 
-```python title="app/functions.py"
+```python title="app/tasks/envia.py"
 load_dotenv('/PATH/TO/twilio.env') # Altere para o caminho completo do seu arquivo twilio.env
 ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
 AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
@@ -33,20 +75,17 @@ Para adicionar as variáveis automaticamente no nosso arquivo, temos os seguinte
 Você só pode adicionar um SID, um TOKEN e um TWILIO_PHONE, então cuidado ao adicioná - los.
 ///
 
-Para adicionar a sua credencial `ACCOUNT_SID` digite no seu terminal:
+Para configurar a sua credencial digite no seu terminal, substituindo `SEU_ACCOUNT_SID` pelo SID da sua conta Twilio:
+
+<div class="termy">
 
 ```bash
-palmeiras sid SEU_ACCOUNT_SID
-```
-O mesmo comando pode ser usado para os demais, como no exemplo:
+$ palmeiras sid SEU_ACCOUNT_SID
+---> 100%
+[15:44:12] TWILIO_ACCOUNT_SID configurado com sucesso!             cli.py:49
 
-```bash
-palmeiras token SEU_ACCOUNT_TOKEN
 ```
-ou
-```bash
-palmeiras twilio-phone SEU_TWILIO_PHONE
-```
+</div>
 
 Já no caso do `destiny-phone`, é possível adicionar um ou mais de um número por vez, tendo em vista que podemos querer encaminhar as mensagens para vários números. Para ele digite os números que deseja adicionar separados por espaços:
 
