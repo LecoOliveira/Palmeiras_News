@@ -16,7 +16,7 @@ def test_sid_deve_retornar_0_se_rodar():
 
 
 def test_sid_deve_retornar_um_texto_mostrando_o_sid():
-    result = runner.invoke(cli, ['show', '--sid'])
+    result = runner.invoke(cli, ['listar', '--sid'])
     assert result.exit_code == 0
     assert 'TWILIO_ACCOUNT_SID' in result.stdout
 
@@ -41,13 +41,13 @@ def test_sid_ja_contem_no_arquivo():
 
 
 def test_listar_deve_retornar_todas_as_variaveis_cadastradas():
-    result = runner.invoke(cli, ['show'])
+    result = runner.invoke(cli, ['listar'])
     assert result.exit_code == 0
     assert 'TWILIO_' in result.stdout
 
 
 def test_listar_deve_retornar_mensagem_de_erro_ao_ler_arquivo():
-    result = runner.invoke(cli, ['show', '--sid', '--env', 'test_file.txt'])
+    result = runner.invoke(cli, ['listar', '--sid', '--env', 'test_file.txt'])
     assert result.exit_code == 0
     assert 'Erro ao ler o arquivo' in result.stdout
 
@@ -55,7 +55,7 @@ def test_listar_deve_retornar_mensagem_de_erro_ao_ler_arquivo():
 def test_listar_deve_retornar_mensagem_de_erro_ao_nao_identificar_a_variavel():
     with open('temp_file.txt', 'w'):
         result = runner.invoke(
-            cli, ['show', '--sid', '--env', 'temp_file.txt']
+            cli, ['listar', '--sid', '--env', 'temp_file.txt']
         )
         assert result.exit_code == 0
         assert 'Nenhuma variável de ambiente' in result.stdout
