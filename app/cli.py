@@ -231,8 +231,7 @@ def destiny_phone(
     Comando: `palmeiras destiny-phone YOUR_TWILIO_DESTINY_PHONES`
 
     Args: Argumentos:
-        phones (List[str]): Um ou mais telefones que deseja configurar para que
-        possam receber as mensagens (números devem ser separados por espaço) Ex: +551199999999 +5511999999999.
+        phones (List[str]): Um ou mais telefones que deseja configurar para que possam receber as mensagens (números devem ser separados por espaço) Ex: +551199999999 +5511999999999.
         env (str): Arquivo que será armazenada a variável de ambiente.
     """
     padrao = compile(r'^\+\d{2,3}\d{2}\d{4,5}\d{4}$')
@@ -255,9 +254,7 @@ def destiny_phone(
     adicionar_linha('TWILIO_DESTINY_PHONE_NUMBER', numeros_validos, env)
 
 
-@cli.command(
-    'show', help=('Lista todas as variáveis de ambiente cadastradas;')
-)
+@cli.command(help=('Lista todas as variáveis de ambiente cadastradas;'))
 def listar(
     destiny_phone: Annotated[
         bool,
@@ -302,11 +299,21 @@ def listar(
     ] = env,
 ):
     """
-    Lista todas as variáveis de ambiente cadastradas;
+    Lista todas as variáveis de ambiente cadastradas.
 
-    Exemplo:
+    Exemplos:
+        Para listar todas as variáveis:
         ```bash
-        palmeiras show --sid
+        $ palmeiras listar
+
+        [15:13:50] TWILIO_ACCOUNT_SID="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                   TWILIO_AUTH_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                   TWILIO_DESTINY_PHONE_NUMBER="+xxxxxxxxxxxxx"
+                   TWILIO_PHONE_NUMBER="+xxxxxxxxxxxxx"
+        ```
+        Para listar uma variável específica:
+        ```bash
+        $ palmeiras listar --sid
 
         [11:41:16] TWILIO_ACCOUNT_SID="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         ```
