@@ -34,3 +34,8 @@ jobs:
 
       - name: Rodar testes
         run: poetry run task test
+
+      - name: Subir cobertura Codecov
+        uses: codecov/codecov-action@v3.1.4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
