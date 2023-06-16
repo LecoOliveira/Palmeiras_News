@@ -10,49 +10,6 @@ Basta se cadastrar no site oficial, e você terá acesso aos tokens e números n
 ![Imagem Twilio](../assets/imagen_twilio.png)
 
 ---
-### **Conhecendo o aplicativo**
-
-Para começar a usar, logo de cara você ja pode usar o comando `--help` para receber uma introdução:
-<sub>
-<div class="termy">
-
-```bash
-$ palmeiras --help
-// testando
- Usage: palmeiras [OPTIONS] COMMAND [ARGS]...                             
-                                                                          
- Interface para configuração de variáveis de ambiente que serão usadas no 
- Palmeiras_news.                                                          
-                                                                          
-╭─ Options ──────────────────────────────────────────────────────────────╮
-│ --install-completion        [bash|zsh|fish|powe  Install completion    │
-│                             rshell|pwsh]         for the specified     │
-│                                                  shell.                │
-│                                                  [default: None]       │
-│ --show-completion           [bash|zsh|fish|powe  Show completion for   │
-│                             rshell|pwsh]         the specified shell,  │
-│                                                  to copy it or         │
-│                                                  customize the         │
-│                                                  installation.         │
-│                                                  [default: None]       │
-│ --help                                           Show this message and │
-│                                                  exit.                 │
-╰────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ─────────────────────────────────────────────────────────────╮
-│ delete         Comando que deleta uma variável de ambiente do arquivo. │
-│ destiny-phone  Adiciona números para onde serão enviadas as mensagens. │
-│ listar         Lista todas as variáveis de ambiente cadastradas;       │
-│ sid            Configura o SID Twilio na variável de ambiente.         │
-│ token          Adiciona o TOKEN da conta Twilio na variável de         │
-│                ambiente.                                               │
-│ twilio-phone   Configura o TWILIO_PHONE_NUMBER na variável de          │
-│                ambiente.                                               │
-╰────────────────────────────────────────────────────────────────────────╯
-```
-</div>
-
-</sub>
-
 ### **Inserindo credenciais**
 
 Com as credenciais em mãos, é hora de inseri-las no código. Elas estão representadas pelas constantes: `ACCOUNT_SID, AUTH_TOKEN, PHONE_NUMBER, DESTINY_PHONE_NUMBER` dentro da função [`enviar_msg()`](/API/tasks/#tasks.envia.enviar_msg).

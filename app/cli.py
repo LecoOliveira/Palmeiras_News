@@ -123,7 +123,7 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
             file.writelines(linhas)
 
 
-@cli.command(help='Configura o SID Twilio na variável de ambiente.')
+@cli.command(help='Configura o TWILIO_ACCOUNT_SID na variável de ambiente.')
 def sid(
     sid: Annotated[
         str,
@@ -151,7 +151,7 @@ def sid(
     adicionar_linha('TWILIO_ACCOUNT_SID', sid, env)
 
 
-@cli.command(help='Adiciona o TOKEN da conta Twilio na variável de ambiente.')
+@cli.command(help='Configura o TWILI_AUTH_TOKEN na variável de ambiente.')
 def token(
     token: Annotated[
         str,
@@ -207,7 +207,7 @@ def twilio_phone(
     adicionar_linha('TWILIO_PHONE_NUMBER', phone, env)
 
 
-@cli.command(help='Adiciona números para onde serão enviadas as mensagens.')
+@cli.command(help='Configura os números para onde serão enviadas as mensagens.')
 def destiny_phone(
     phones: Annotated[
         List[str],
@@ -254,7 +254,7 @@ def destiny_phone(
     adicionar_linha('TWILIO_DESTINY_PHONE_NUMBER', numeros_validos, env)
 
 
-@cli.command(help=('Lista todas as variáveis de ambiente cadastradas;'))
+@cli.command(help=('Lista todas as variáveis de ambiente cadastradas'))
 def listar(
     destiny_phone: Annotated[
         bool,

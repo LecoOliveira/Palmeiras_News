@@ -3,12 +3,13 @@ site_name: Palmeiras news
 nav:
     - Home: 
         - Palmeiras news : index.md
-    - Usage: 
+    - Como usar: 
         - Usage/variaveis.md
         - Usage/listar.md
     - API:
         - API/tasks.md
         - API/arguments.md
+        - API/conditions.md
         - API/cli.md
 
 repo_url: https://github.com/LecoOliveira/Palmeiras_News
