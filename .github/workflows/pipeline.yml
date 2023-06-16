@@ -33,7 +33,7 @@ jobs:
         run: poetry install --without doc --no-ansi
 
       - name: Rodar testes
-        run: poetry run task test
+        run: poetry run task test --cov-report=xml
 
       - name: Subir cobertura Codecov
         uses: codecov/codecov-action@v3.1.4
