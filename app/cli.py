@@ -359,7 +359,10 @@ def listar(
                 )
     except IOError:
         print()
-        console.log('Erro ao ler o arquivo.\n')
+        console.log(
+            'Erro ao ler o arquivo. Você deve configurar alguma '
+            'variável antes de tentar list-las\n'
+        )
 
 
 @cli.command(help='Comando que deleta uma variável de ambiente do arquivo.')
