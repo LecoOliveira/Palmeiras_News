@@ -207,7 +207,9 @@ def twilio_phone(
     adicionar_linha('TWILIO_PHONE_NUMBER', phone, env)
 
 
-@cli.command(help='Configura os números para onde serão enviadas as mensagens.')
+@cli.command(
+    help='Configura os números para onde serão enviadas as mensagens.'
+)
 def destiny_phone(
     phones: Annotated[
         List[str],

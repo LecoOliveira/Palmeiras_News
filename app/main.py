@@ -32,4 +32,3 @@ app.include_grouper(formata.group)
 # handler.setLevel(logging.DEBUG)
 # task_logger = logging.getLogger('rocketry.task')
 # task_logger.addHandler(handler)
-

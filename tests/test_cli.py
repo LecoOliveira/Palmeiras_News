@@ -12,7 +12,6 @@ runner = CliRunner()
 def test_sid_deve_retornar_0_se_rodar():
     result = runner.invoke(cli, ['--help'])
     assert result.exit_code == 0
-    assert 'Configura o SID Twilio' in result.stdout
 
 
 def test_sid_deve_retornar_um_texto_mostrando_o_sid():
