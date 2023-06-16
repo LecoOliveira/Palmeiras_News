@@ -19,10 +19,10 @@ jobs:
 
       - name: Setando v-envs
         env:
-          TWILIO_AUTH_TOKEN: ${{ secret.TWILIO_AUTH_TOKEN }}
-          TWILIO_ACCOUNT_SID: ${{ secret.TWILIO_ACCOUNT_SID }}
-          TWILIO_DESTINY_PHONE_NUMBER: ${{ secret.TWILIO_DESTINY_PHONE_NUMBER }}
-          TWILIO_PHONE_NUMBER: ${{ secret.TWILIO_PHONE_NUMBER }}
+          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_DESTINY_PHONE_NUMBER: ${{ secrets.TWILIO_DESTINY_PHONE_NUMBER }}
+          TWILIO_PHONE_NUMBER: ${{ secrets.TWILIO_PHONE_NUMBER }}
         run: echo "v-envs setadas."
 
       - name: Instalar dependências do projeto
