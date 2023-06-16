@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup as bs
 from requests import get
 from rocketry.args import argument
 
-from app.constants import HEADERS, URL_PRINCIPAL
+from app.config.constants import HEADERS, URL_PRINCIPAL
 
 
 @argument()

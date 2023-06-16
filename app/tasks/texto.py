@@ -6,7 +6,7 @@ from rocketry.conds import daily, retry, time_of_day
 
 from app.arguments import hora_jogo, link_jogo
 from app.conditions import data_igual
-from app.constants import HEADERS
+from app.config.constants import HEADERS
 
 group = Grouper()
 hora_max = f'{str(int(hora_jogo()[:2]) + 2)}:30'

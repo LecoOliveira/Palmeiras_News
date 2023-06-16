@@ -33,7 +33,7 @@ def test_sid_cria_arquivo_se_nao_existe():
 def test_sid_ja_contem_no_arquivo():
     with open('temp_file.txt', 'w') as file:
         file.write('TWILIO_ACCOUNT_SID="teste"')
-    result = runner.invoke(cli, ['sid', 'teste'])
+    result = runner.invoke(cli, ['sid', 'teste', '--env', 'temp_file.txt'])
     assert result.exit_code == 0
     assert 'já existe', 'no arquivo' in result.stdout
     os.remove('temp_file.txt')
@@ -43,13 +43,16 @@ def test_sid_ja_contem_no_arquivo():
 
 
 def test_listar_deve_retornar_todas_as_variaveis_cadastradas():
-    result = runner.invoke(cli, ['listar'])
+    with open('temp_file.txt', 'w') as file:
+        file.write('TWILIO_ACCOUNT_SID="teste"')
+    result = runner.invoke(cli, ['listar', '--env', 'temp_file.txt'])
     assert result.exit_code == 0
     assert 'TWILIO_' in result.stdout
+    os.remove('temp_file.txt')
 
 
 def test_listar_deve_retornar_mensagem_de_erro_ao_ler_arquivo():
-    result = runner.invoke(cli, ['listar', '--sid', '--env', 'test_file.txt'])
+    result = runner.invoke(cli, ['listar', '--sid', '--env', 'temp_file.txt'])
     assert result.exit_code == 0
     assert 'Erro ao ler o arquivo' in result.stdout
 
