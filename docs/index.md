@@ -6,6 +6,9 @@
 <a href="https://codecov.io/github/LecoOliveira/Palmeiras_News" target="_blank">
 <img src="https://codecov.io/github/LecoOliveira/Palmeiras_News/branch/main/graph/badge.svg?token=RLWJN9MGVP"/>
 </a>
+<a href="https://github.com/LecoOliveira/Palmeiras_News/actions" target="_blank">
+<img alt="GitHub Workflow Status (with event)" src="https://img.shields.io/github/actions/workflow/status/LecoOliveira/Palmeiras_news/pipeline.yml">
+</a>
 </div>
 
 ---
