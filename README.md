@@ -1,5 +1,7 @@
 <div align="center">
-    <img class="logo" src="docs/assets/palmeiras_news.png" width="50%">
+    <div>
+        <img class="logo" src="docs/assets/palmeiras_news.png" width="50%">
+    </div>
     <a href="https://codecov.io/github/LecoOliveira/Palmeiras_News" target="_blank">
         <img src="https://codecov.io/github/LecoOliveira/Palmeiras_News/branch/main/graph/badge.svg?token=RLWJN9MGVP">
     </a>
