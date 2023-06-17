@@ -1,11 +1,7 @@
 site_name: Palmeiras news
 
 nav:
-    - Home: 
-        - Palmeiras news : index.md
-    - Como usar: 
-        - Usage/variaveis.md
-        - Usage/listar.md
+    - Início rápido: index.md
     - API:
         - API/tasks.md
         - API/arguments.md
@@ -23,7 +19,6 @@ theme:
       accent: teal
       
     features:
-    - navigation.tabs
     - navigation.tabs.sticky
     - navigation.path
     name: material
