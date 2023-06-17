@@ -16,7 +16,6 @@ task_logger.addHandler(handler)
 
 app = Rocketry(
     config={
-        # 'force_status_from_logs': False,
         'silence_task_prerun': False,
         'silence_task_logging': False,
         'silence_cond_check': False,

@@ -17,7 +17,6 @@ def data_hoje() -> str:
         str: Retorna a data do dia, no formato 'dd/mm'.
     """
     return datetime.today().strftime('%d/%m')
-    # return '04/06'
 
 
 @argument()
@@ -55,7 +54,6 @@ def link_jogo() -> str:
     )
 
     return html_principal.find('div', class_='faixa').find('a').get('href')
-    # return 'https://www.palmeiras.com.br/jogo/?idjogo=2588'
 
 
 @argument()
@@ -81,4 +79,3 @@ def hora_jogo() -> str:
     )
 
     return f'{str(int(hora_jogo[:2]) - 2)}:00'
-    # return '16:44'
