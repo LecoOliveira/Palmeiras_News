@@ -3,11 +3,14 @@
     <em>Receba informações do próximo jogo em seu celular</em>
 </p>
 <div align="center">
+<a href="https://github.com/LecoOliveira/Palmeiras_News/blob/main/LICENSE" target="_blank">
+<img alt="GitHub" src="https://img.shields.io/github/license/LecoOliveira/Palmeiras_news?label=License&logo=gnu&style=plastic&color=dark-green">
+</a>
 <a href="https://codecov.io/github/LecoOliveira/Palmeiras_News" target="_blank">
-<img src="https://codecov.io/github/LecoOliveira/Palmeiras_News/branch/main/graph/badge.svg?token=RLWJN9MGVP"/>
+<img alt="Codecov" src="https://img.shields.io/codecov/c/github/LecoOliveira/Palmeiras_news?label=Coverage&style=plastic&logo=codecov&color=dark-green">
 </a>
 <a href="https://github.com/LecoOliveira/Palmeiras_News/actions" target="_blank">
-<img alt="GitHub Workflow Status (with event)" src="https://img.shields.io/github/actions/workflow/status/LecoOliveira/Palmeiras_news/pipeline.yml">
+<img alt="GitHub Workflow Status (with event)" src="https://img.shields.io/github/actions/workflow/status/LecoOliveira/Palmeiras_news/pipeline.yml?style=plastic&logo=github&label=CI/CD&color=dark-green">
 </a>
 </div>
 
@@ -26,6 +29,7 @@ Para fazer a instalação usaremos o pip:
 
 ```bash
 $ pip install palmeiras-news
+
 ---> 100%
 palmeiras-news instalado com sucesso
 ```
@@ -66,7 +70,7 @@ $ palmeiras --help
 ╰────────────────────────────────────────────────────────────────────────╯
 ```
 </div>
-<center><sup>*Logo de cara, podemos observar todos os comandos de configuração listados na sessão `Commands`*</center></sup>
+<center><sup>*Logo de cara, podemos observar todos os comandos de configuração listados na sessão `Commands`*</sup></center>
 
 ---
 
@@ -99,6 +103,7 @@ Para configurar a sua credencial (seja ela o `sid`, `token` ou `twilio-phone`) d
 
 ```bash
 $ palmeiras sid SEU_ACCOUNT_SID
+
 ---> 100%
 [15:44:12] TWILIO_ACCOUNT_SID configurado com sucesso!
 
@@ -114,6 +119,7 @@ Já no caso do `destiny-phone`, é possível adicionar um ou mais números por v
 
 ```bash
 $ palmeiras destiny-phone SEU_DESTINY_PHONE1 SEU_DESTINY_PHONE2
+
 ---> 100%
 [20:59:45] TWILIO_DESTINY_PHONE_NUMBER SEU_DESTINY_PHONE1 SEU_DESTINY_PHONE2 configurado(s) com sucesso.
 ```
@@ -135,6 +141,7 @@ Para isso use o comando `listar`. Se não passar nenhuma flag será retornado to
 
 ```bash
 $ palmeiras listar
+
 [21:37:23] TWILIO_AUTH_TOKEN="e5xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
            TWILIO_ACCOUNT_SID="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"              
            TWILIO_DESTINY_PHONE_NUMBER="+55xxxxxxxxxxx"                         
