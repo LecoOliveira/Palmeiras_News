@@ -67,6 +67,12 @@ def test_listar_deve_retornar_mensagem_de_erro_ao_nao_identificar_a_variavel():
         os.remove('temp_file.txt')
 
 
+def test_listar_deve_retornar_um_erro_ao_nao_encontrar_arquivo():
+    result = runner.invoke(cli, ['listar', '--env', 'temp_file.txt'])
+    assert result.exit_code == 0
+    assert 'Nenhum arquivo' in result.stdout
+
+
 # destiny_phone tests ----------------------------------------------
 
 
