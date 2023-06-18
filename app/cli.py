@@ -338,10 +338,19 @@ def listar(
     }.get(True, None)
 
     if option is None:
-        with open(env, 'r') as fr:
+        try:
+            with open(env, 'r') as fr:
+                print()
+                console.log(''.join(fr))
+            return
+        except FileNotFoundError:
             print()
-            console.log(''.join(fr))
-        return
+            console.log(
+                f'Nenhum arquivo {env} encontrado.\n'
+                'Tente sem o "--env", ou rode "palmeiras listar '
+                '--help" para obter ajuda.'
+            )
+            return
 
     try:
         with open(env, 'r') as fr:
@@ -354,14 +363,14 @@ def listar(
                 print()
                 console.log(
                     f'Nenhuma variável de ambiente "{option}" encontrada.\n'
-                    f'Para cadastrar tente: '
+                    f'Para cadastrar tente:'
                     f'\npalmeiras [OPTION] [ARG] ou palmeiras --help\n'
                 )
     except IOError:
         print()
         console.log(
             'Erro ao ler o arquivo. Você deve configurar alguma '
-            'variável antes de tentar list-las\n'
+            'variável antes de tentar listá-las\n'
         )
 
 
