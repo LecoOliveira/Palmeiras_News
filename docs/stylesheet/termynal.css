@@ -6,11 +6,6 @@
  * @license MIT
  */
 
-.logo {
-    display: block; 
-    margin: auto;
-}
-
 :root {
     --color-bg: #e7f4e8;
     --color-text: #16442a;

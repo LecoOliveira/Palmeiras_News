@@ -129,7 +129,7 @@ $ palmeiras destiny-phone SEU_DESTINY_PHONE1 SEU_DESTINY_PHONE2
 Importante lembrar, que todos os `destiny_phone` devem ser cadastrados e devidamente ativados no seu painel da Twilio. Sem isso, eles não receberão as mensagens.
 /// 
 
-E sim, para cada número cadastrado, será cobrado pela mensagem enviada. A ideia inicial é para que seja um projeto simples, pessoal. E para isso os créditos dados como teste pela Twilio já ajudarão. Mas caso goste e queira continuar usando, pode comprar mais créditos, fica bem barato cada mensagem (consulte os preços no [site](https://www.twilio.com/pt-br/sms/pricing/br).)
+E sim, para cada número cadastrado, será cobrado pela mensagem enviada. A ideia inicial é para que seja um projeto simples, pessoal. E para isso os créditos dados como teste pela Twilio já ajudarão. Mas caso goste e queira continuar usando, pode comprar mais créditos, fica bem barato cada mensagem (consulte a [tabela de preços](https://www.twilio.com/pt-br/sms/pricing/br)).
 
 ---
 ### Listando variáveis

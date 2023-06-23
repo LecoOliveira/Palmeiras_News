@@ -26,3 +26,20 @@ a.internal-link::after {
     */
     content: "\00A0↪";
 }
+
+.admonition.warning {
+    border: 0;
+    border-left: .3em solid;
+    border-radius: 0.5em;
+}
+
+.admonition.tip {
+    border: 0;
+    border-left: .3em solid;
+    border-radius: 0.5em;
+}
+
+.logo {
+    display: block; 
+    margin: auto;
+}
