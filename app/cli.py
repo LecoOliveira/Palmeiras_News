@@ -18,6 +18,7 @@ env = '.env'
 
 
 def progress_bar(time_: float = 0.02, description: str = 'Configurando...'):
+    print()
     total = 0
     for value in track(range(100), description=description):
         time.sleep(time_)
@@ -38,25 +39,22 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
     """
     if chave != 'TWILIO_DESTINY_PHONE_NUMBER':
         if not os.path.exists(env):
-            with open(env, 'w+') as arq:
-                arquivo = arq.write('')
+            open(env, 'w').close()
+
         with open(env, 'r+') as arquivo:
             linhas = arquivo.readlines()
             if not any(chave in linha for linha in linhas):
                 arquivo.write(f'{chave}="{valor}"\n')
-                print()
                 progress_bar()
                 console.log(f'{chave} configurado com sucesso!\n')
             else:
-                print()
                 progress_bar(0)
                 console.log(
                     f'{chave} [b][red]já existe[/red][/b] no arquivo.\n'
                 )
     else:
         if not os.path.exists(env):
-            with open(env, 'w') as arq:
-                arquivo = arq.write(' ')
+            open(env, 'w').close()
 
         with open(env, 'r+') as file:
             linhas = file.readlines()
@@ -70,9 +68,9 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
 
                     twilio_phones_list = phones_agrupados.split()
                     phones_novos = [
-                        str(phone)
+                        phone
                         for phone in valor
-                        if str(phone) not in twilio_phones_list
+                        if phone not in twilio_phones_list
                     ]
 
                     phones_adicionados = []
@@ -90,30 +88,26 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
                         linhas[i] = linha
 
                     for phone in phones_adicionados:
-                        print()
                         progress_bar()
                         console.log(
                             f'{chave} {phone} configurado com sucesso.\n'
                         )
 
                     for phone in valor:
-                        if str(phone) in twilio_phones_list:
-                            if (
-                                str(phone) in twilio_phones_list
-                                and str(phone) not in phones_adicionados
-                            ):
-                                print()
-                                progress_bar(0.001)
-                                console.log(
-                                    f'O telefone {phone} já existe no arquivo.\n'
-                                )
+                        if (
+                            phone in twilio_phones_list
+                            and phone not in phones_adicionados
+                        ):
+                            progress_bar(0.001)
+                            console.log(
+                                f'O telefone {phone} já existe no arquivo.\n'
+                            )
 
                     encontrado = True
                     break
 
             if not encontrado:
                 linhas.append(f'{chave}="{" ".join(valor)}"\n')
-                print()
                 progress_bar()
                 console.log(
                     f'{chave} {" ".join(valor)} configurado(s) com sucesso.\n'
@@ -247,9 +241,9 @@ def destiny_phone(
 
     if numeros_invalidos:
         console.log(
-            f'Número(s) {" ".join(numeros_invalidos)} inválido(s). '
+            f'\nNúmero(s) {" ".join(numeros_invalidos)} inválido(s). '
             'O número deve conter o formato +xxxxxxxxxxxxx '
-            '(Começando com o sinal "+" e ter entre 12 e 14 números).'
+            '(Começando com o sinal "+" e ter entre 12 e 14 números).\n'
         )
         return
 
@@ -339,37 +333,32 @@ def listar(
 
     if option is None:
         try:
-            with open(env, 'r') as fr:
-                print()
-                console.log(''.join(fr))
+            with open(env, 'r') as arquivo:
+                console.log(f'\n{"".join(arquivo)}')
             return
         except FileNotFoundError:
-            print()
             console.log(
-                f'Nenhum arquivo {env} encontrado.\n'
+                f'\nNenhum arquivo {env} encontrado.\n'
                 'Tente sem o "--env", ou rode "palmeiras listar '
-                '--help" para obter ajuda.'
+                '--help" para obter ajuda.\n'
             )
             return
 
     try:
-        with open(env, 'r') as fr:
-            linhas = fr.readlines()
+        with open(env, 'r') as arquivo:
+            linhas = arquivo.readlines()
             valores = [linha for linha in linhas if option in linha]
             if valores:
-                print()
-                console.log(''.join(valores))
+                console.log(f'\n{"".join(valores)}\n')
             else:
-                print()
                 console.log(
-                    f'Nenhuma variável de ambiente "{option}" encontrada.\n'
+                    f'\nNenhuma variável de ambiente "{option}" encontrada.\n'
                     f'Para cadastrar tente:'
                     f'\npalmeiras [OPTION] [ARG] ou palmeiras --help\n'
                 )
     except IOError:
-        print()
         console.log(
-            'Erro ao ler o arquivo. Você deve configurar alguma '
+            '\nErro ao ler o arquivo. Você deve configurar alguma '
             'variável antes de tentar listá-las\n'
         )
 
@@ -409,13 +398,11 @@ def delete(
         for i, item in enumerate(variaveis):
             if option[variavel] in variaveis[i]:
                 variaveis.remove(item)
-                print()
                 progress_bar(description='Removendo...')
                 console.log(f'{option[variavel]} removido com sucesso.\n')
                 with open(env, 'w') as fw:
                     arquivo = fw.write(''.join(variaveis))
                 return
         else:
-            print()
             progress_bar(0.001, description='Removendo...')
             console.log(f'O arquivo não contém nenhum {option[variavel]}.\n')

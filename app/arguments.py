@@ -7,6 +7,10 @@ from rocketry.args import argument
 
 from app.config.constants import HEADERS, URL_PRINCIPAL
 
+html_principal = bs(
+    (get(URL_PRINCIPAL, headers=HEADERS)).content, 'html.parser'
+)
+
 
 @argument()
 def data_hoje() -> str:
@@ -28,10 +32,6 @@ def data_jogo() -> str:
         str: Retorna a data no formato: 'dd/mm'
     """
 
-    html_principal = bs(
-        (get(URL_PRINCIPAL, headers=HEADERS)).content, 'html.parser'
-    )
-
     return (
         html_principal.find('div', class_='faixa')
         .find('div', {'class': 'header-tempo-real-campeonato'})
@@ -49,10 +49,6 @@ def link_jogo() -> str:
         str: Retorna o link do próximo jogo.
     """
 
-    html_principal = bs(
-        (get(URL_PRINCIPAL, headers=HEADERS)).content, 'html.parser'
-    )
-
     return html_principal.find('div', class_='faixa').find('a').get('href')
 
 
@@ -64,10 +60,6 @@ def hora_jogo() -> str:
     Returns:
         str: Retorna a hora no formato: 'dd/mm'
     """
-
-    html_principal = bs(
-        (get(URL_PRINCIPAL, headers=HEADERS)).content, 'html.parser'
-    )
 
     hora_jogo = (
         html_principal.find('div', class_='faixa')
