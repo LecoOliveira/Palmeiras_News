@@ -1,3 +1,5 @@
+import logging
+import logging.config
 import os
 import subprocess
 import time
@@ -15,6 +17,8 @@ cli = typer.Typer(
 )
 console = Console()
 env = '.env'
+logging.config.fileConfig('app/config/logging.conf')
+logger = logging.getLogger('rocketry.task')
 
 
 def progress_bar(time_: float = 0.02, description: str = 'Configurando...'):
@@ -43,15 +47,19 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
 
         with open(env, 'r+') as arquivo:
             linhas = arquivo.readlines()
+
             if not any(chave in linha for linha in linhas):
                 arquivo.write(f'{chave}="{valor}"\n')
                 progress_bar()
-                console.log(f'{chave} configurado com sucesso!\n')
+                msg_confirm = f'{chave} configurado com sucesso!'
+                console.log(f'{msg_confirm}\n')
+                logger.info(f'{msg_confirm}')
+
             else:
-                progress_bar(0)
-                console.log(
-                    f'{chave} [b][red]já existe[/red][/b] no arquivo.\n'
-                )
+                progress_bar(0, description='[b][red]ERRO!!![/red][b]')
+                msg_erro = f'{chave} já existe no arquivo.'
+                console.log(f'{msg_erro}\n')
+                logger.error(f'{msg_erro}')
     else:
         if not os.path.exists(env):
             open(env, 'w').close()
@@ -89,19 +97,25 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
 
                     for phone in phones_adicionados:
                         progress_bar()
-                        console.log(
-                            f'{chave} {phone} configurado com sucesso.\n'
+                        msg_confirm = (
+                            f'{chave} {phone} configurado com sucesso.'
                         )
+                        console.log(f'{msg_confirm}\n')
+                        logger.info(f'{msg_confirm}')
 
                     for phone in valor:
                         if (
                             phone in twilio_phones_list
                             and phone not in phones_adicionados
                         ):
-                            progress_bar(0.001)
-                            console.log(
-                                f'O telefone {phone} já existe no arquivo.\n'
+                            progress_bar(
+                                0, description='[b][red]ERRO!!![/red][b]'
                             )
+                            msg_erro = (
+                                f'O telefone {phone} já existe no arquivo.'
+                            )
+                            console.log(f'{msg_erro}\n')
+                            logger.error(f'{msg_erro}')
 
                     encontrado = True
                     break
@@ -109,9 +123,11 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
             if not encontrado:
                 linhas.append(f'{chave}="{" ".join(valor)}"\n')
                 progress_bar()
-                console.log(
-                    f'{chave} {" ".join(valor)} configurado(s) com sucesso.\n'
+                msg_confirm = (
+                    f'{chave} {" ".join(valor)} configurado(s) com sucesso.'
                 )
+                console.log(f'{msg_confirm}\n')
+                logger.info(f'{msg_confirm}')
 
             file.seek(0)
             file.writelines(linhas)
@@ -240,11 +256,13 @@ def destiny_phone(
     ]
 
     if numeros_invalidos:
+        msg_erro = f'Número(s) {" ".join(numeros_invalidos)} inválido(s).'
         console.log(
-            f'\nNúmero(s) {" ".join(numeros_invalidos)} inválido(s). '
+            f'\n{msg_erro} '
             'O número deve conter o formato +xxxxxxxxxxxxx '
             '(Começando com o sinal "+" e ter entre 12 e 14 números).\n'
         )
+        logger.error(f'{msg_erro}')
         return
 
     adicionar_linha('TWILIO_DESTINY_PHONE_NUMBER', numeros_validos, env)
@@ -336,12 +354,14 @@ def listar(
             with open(env, 'r') as arquivo:
                 console.log(f'\n{"".join(arquivo)}')
             return
+
         except FileNotFoundError:
             console.log(
                 f'\nNenhum arquivo {env} encontrado.\n'
                 'Tente sem o "--env", ou rode "palmeiras listar '
                 '--help" para obter ajuda.\n'
             )
+            logger.error(f'Nenhum arquivo {env} encontrado.')
             return
 
     try:
@@ -352,15 +372,20 @@ def listar(
                 console.log(f'\n{"".join(valores)}\n')
             else:
                 console.log(
-                    f'\nNenhuma variável de ambiente "{option}" encontrada.\n'
+                    f'\nNenhuma variável de ambiente"{option}" encontrada.\n'
                     f'Para cadastrar tente:'
                     f'\npalmeiras [OPTION] [ARG] ou palmeiras --help\n'
                 )
+                logger.error(
+                    f'Nenhuma variável de ambiente"{option}" encontrada.'
+                )
+
     except IOError:
         console.log(
             '\nErro ao ler o arquivo. Você deve configurar alguma '
             'variável antes de tentar listá-las\n'
         )
+        logger.warning(f'Erro ao ler o arquivo.')
 
 
 @cli.command(help='Comando que deleta uma variável de ambiente do arquivo.')
@@ -387,7 +412,7 @@ def delete(
         env (str): Arquivo de onde a função vai deletar a variável.
     """
     option = {
-        'destiny_phone': 'TWILIO_DESTINY_PHONE_NUMBER',
+        'destiny-phone': 'TWILIO_DESTINY_PHONE_NUMBER',
         'sid': 'TWILIO_ACCOUNT_SID',
         'twilio_phone': 'TWILIO_PHONE_NUMBER',
         'token': 'TWILIO_AUTH_TOKEN',
@@ -399,10 +424,14 @@ def delete(
             if option[variavel] in variaveis[i]:
                 variaveis.remove(item)
                 progress_bar(description='Removendo...')
-                console.log(f'{option[variavel]} removido com sucesso.\n')
+                msg_confirm = f'{option[variavel]} removido com sucesso.'
+                console.log(f'{msg_confirm}\n')
+                logger.info(f'{msg_confirm}')
                 with open(env, 'w') as fw:
                     arquivo = fw.write(''.join(variaveis))
                 return
         else:
-            progress_bar(0.001, description='Removendo...')
-            console.log(f'O arquivo não contém nenhum {option[variavel]}.\n')
+            progress_bar(0, description='[b][red]ERRO!!![/red][/b]')
+            msg_erro = f'O arquivo não contém nenhum {option[variavel]}.'
+            console.log(f'{msg_erro}\n')
+            logger.error(msg_erro)
