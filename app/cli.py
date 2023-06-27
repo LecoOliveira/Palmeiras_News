@@ -1,3 +1,5 @@
+import logging
+import logging.config
 import os
 import subprocess
 import time
@@ -15,9 +17,18 @@ cli = typer.Typer(
 )
 console = Console()
 env = '.env'
+logging.config.fileConfig('app/config/logging.conf')
+logger = logging.getLogger('rocketry.task')
 
 
 def progress_bar(time_: float = 0.02, description: str = 'Configurando...'):
+    """
+    Função que cria uma barra de progresso, para ser usada nos comandos do CLI.
+
+    Args:
+        time_ (float): Tempo que a barra leva para completar 100%.
+        description (str): Frase que aparece na barra.
+    """
     print()
     total = 0
     for value in track(range(100), description=description):
@@ -47,11 +58,13 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
                 arquivo.write(f'{chave}="{valor}"\n')
                 progress_bar()
                 console.log(f'{chave} configurado com sucesso!\n')
+                logger.info(f'{chave} configurado(s) com sucesso!')
             else:
-                progress_bar(0)
+                progress_bar(0, description='[b][red]ERRO!!![/red][/b]')
                 console.log(
                     f'{chave} [b][red]já existe[/red][/b] no arquivo.\n'
                 )
+                logger.error(f'{chave} já existe no arquivo.')
     else:
         if not os.path.exists(env):
             open(env, 'w').close()
@@ -92,16 +105,20 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
                         console.log(
                             f'{chave} {phone} configurado com sucesso.\n'
                         )
+                        logger.info(f'{chave} configurado(s) com sucesso!')
 
                     for phone in valor:
                         if (
                             phone in twilio_phones_list
                             and phone not in phones_adicionados
                         ):
-                            progress_bar(0.001)
+                            progress_bar(
+                                0, description='[b][red]ERRO!!![/red][/b]'
+                            )
                             console.log(
                                 f'O telefone {phone} já existe no arquivo.\n'
                             )
+                            logger.error(f'{phone} já existe no arquivo.')
 
                     encontrado = True
                     break
@@ -112,6 +129,7 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
                 console.log(
                     f'{chave} {" ".join(valor)} configurado(s) com sucesso.\n'
                 )
+                logger.info(f'{chave} configurado(s) com sucesso!')
 
             file.seek(0)
             file.writelines(linhas)
@@ -208,7 +226,7 @@ def destiny_phone(
     phones: Annotated[
         List[str],
         typer.Argument(
-            help='Um ou mais destiny_phone que deseja configurar '
+            help='Um ou mais destiny-phone que deseja configurar '
             '(números devem ser separados por espaço); '
             'Ex: +551199999999 +5511999999999',
             show_default=False,
@@ -387,7 +405,7 @@ def delete(
         env (str): Arquivo de onde a função vai deletar a variável.
     """
     option = {
-        'destiny_phone': 'TWILIO_DESTINY_PHONE_NUMBER',
+        'destiny-phone': 'TWILIO_DESTINY_PHONE_NUMBER',
         'sid': 'TWILIO_ACCOUNT_SID',
         'twilio_phone': 'TWILIO_PHONE_NUMBER',
         'token': 'TWILIO_AUTH_TOKEN',
@@ -404,5 +422,6 @@ def delete(
                     arquivo = fw.write(''.join(variaveis))
                 return
         else:
-            progress_bar(0.001, description='Removendo...')
+            progress_bar(0, description='[b][red]ERRO!!![/red][/b]')
             console.log(f'O arquivo não contém nenhum {option[variavel]}.\n')
+            logger.error(f'O arquivo não contém nenhum {option[variavel]}.')
