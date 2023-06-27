@@ -6,7 +6,7 @@ from twilio.base.exceptions import TwilioRestException
 
 from app.tasks.envia import enviar_msg
 from app.tasks.formata import formata_texto
-from app.tasks.texto import texto_msg
+from app.tasks.texto import sem_dados, texto_msg
 
 test_link = 'https://www.palmeiras.com.br/jogo/?idjogo=2588'
 test_hora_jogo = datetime.now().strftime('%H:%M')
@@ -58,7 +58,7 @@ def test_enviar_msg_log_error_when_cannot_send_a_message(
     sid = enviar_msg('Wrong message')
 
     assert sid is None
-    assert 'Oh no:' in caplog.text
+    assert 'Erro ao enviar mensagem' in caplog.text
     assert error_message in caplog.text
 
 
@@ -66,4 +66,8 @@ def test_enviar_msg_log_error_when_cannot_send_a_message(
 
 
 def test_formata_texto_deve_retronar_um_str():
-    assert isinstance(formata_texto(), str)
+    assert isinstance(formata_texto(texto=result), str)
+
+
+def test_formata_texto_deve_retornar_aviso_caso_nao_tenha_dados_do_jogo():
+    assert formata_texto(texto=sem_dados) == sem_dados
