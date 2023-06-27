@@ -2,7 +2,7 @@ from rocketry import Grouper
 from rocketry.args import Return
 from rocketry.conds import after_success
 
-from app.tasks.texto import texto_msg
+from app.tasks.texto import sem_dados, texto_msg
 
 group = Grouper()
 
@@ -18,9 +18,8 @@ def formata_texto(texto: str = Return(texto_msg)) -> str:
     Returns: Retorna:
         str: Texto pronto para ser enviado na função enviar_msg().
     """
-    texto = str(texto)
 
-    if texto is not None:
+    if texto != sem_dados:
         texto = texto.replace('  ', ' ')
         jogo = texto[: texto.find(' l')]
         campeonato = texto[texto.find(' l') + 2 : texto.find(')') + 1]
@@ -39,3 +38,5 @@ def formata_texto(texto: str = Return(texto_msg)) -> str:
             f'{local}\n{transmissao}\n{arbitro}\n\n'
             f'{escalacao}\n\n{pendurados}\n\n{suspensos}\n\n{desfalques}'
         )
+    else:
+        return sem_dados
