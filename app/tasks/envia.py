@@ -13,6 +13,7 @@ from app.tasks.formata import formata_texto
 
 group = Grouper()
 CLIENT = Client(ACCOUNT_SID, AUTH_TOKEN)
+logger = logging.getLogger('rocketry.task')
 
 
 @group.task(after_finish(formata_texto))
@@ -33,7 +34,7 @@ def enviar_msg(texto: str = Return(formata_texto)) -> str:
             )
 
     except TwilioRestException as erro:
-        logging.error(f'Oh no: {erro}')
+        logger.error('Erro ao enviar mensagem! (Unable to create...)')
         return
 
     return message.sid
