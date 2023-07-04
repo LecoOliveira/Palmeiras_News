@@ -51,9 +51,9 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
             if not any(chave in linha for linha in linhas):
                 arquivo.write(f'{chave}="{valor}"\n')
                 progress_bar()
-                msg_confirm = f'{chave} configurado com sucesso!'
-                console.log(f'{msg_confirm}\n')
-                logger.info(f'{msg_confirm}')
+                msg_confirmacao = f'{chave} configurado com sucesso!'
+                console.log(f'{msg_confirmacao}\n')
+                logger.info(f'{msg_confirmacao}')
 
             else:
                 progress_bar(0, description='[b][red]ERRO!!![/red][b]')
@@ -64,11 +64,11 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
         if not os.path.exists(env):
             open(env, 'w').close()
 
-        with open(env, 'r+') as file:
-            linhas = file.readlines()
+        with open(env, 'r+') as arquivo:
+            linhas = arquivo.readlines()
             encontrado = False
 
-            for i, linha in enumerate(linhas):
+            for indice, linha in enumerate(linhas):
                 if chave in linha:
                     linha = linha.rstrip('\n')
                     partes_linha = linha.split('"')
@@ -81,7 +81,7 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
                         if phone not in twilio_phones_list
                     ]
 
-                    phones_adicionados = []
+                    phones_adicionados = list()
                     for phone in phones_novos:
                         if phone not in twilio_phones_list:
                             twilio_phones_list.append(phone)
@@ -93,15 +93,15 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
                             f'{partes_linha[0]}"{phones_agrupados}"'
                             f'{partes_linha[2]}\n'
                         )
-                        linhas[i] = linha
+                        linhas[indice] = linha
 
                     for phone in phones_adicionados:
                         progress_bar()
-                        msg_confirm = (
+                        msg_confirmacao = (
                             f'{chave} {phone} configurado com sucesso.'
                         )
-                        console.log(f'{msg_confirm}\n')
-                        logger.info(f'{msg_confirm}')
+                        console.log(f'{msg_confirmacao}\n')
+                        logger.info(f'{msg_confirmacao}')
 
                     for phone in valor:
                         if (
@@ -123,14 +123,14 @@ def adicionar_linha(chave: str, valor: List[str], env: str = env):
             if not encontrado:
                 linhas.append(f'{chave}="{" ".join(valor)}"\n')
                 progress_bar()
-                msg_confirm = (
+                msg_confirmacao = (
                     f'{chave} {" ".join(valor)} configurado(s) com sucesso.'
                 )
-                console.log(f'{msg_confirm}\n')
-                logger.info(f'{msg_confirm}')
+                console.log(f'{msg_confirmacao}\n')
+                logger.info(f'{msg_confirmacao}')
 
-            file.seek(0)
-            file.writelines(linhas)
+            arquivo.seek(0)
+            arquivo.writelines(linhas)
 
 
 @cli.command(help='Configura o TWILIO_ACCOUNT_SID na variável de ambiente.')
@@ -249,10 +249,13 @@ def destiny_phone(
     padrao = compile(r'^\+\d{2,3}\d{2}\d{4,5}\d{4}$')
 
     numeros_validos = [
-        phone for i, phone in enumerate(phones) if padrao.match(phones[i])
+        phone
+        for indice, phone in enumerate(phones)
+        if padrao.match(phones[indice])
     ]
+
     numeros_invalidos = [
-        phone for i, phone in enumerate(phones) if not padrao.match(phones[i])
+        phone for phone in phones if phone not in numeros_validos
     ]
 
     if numeros_invalidos:
@@ -320,10 +323,10 @@ def listar(
         ```bash
         $ palmeiras listar
 
-        [15:13:50] TWILIO_ACCOUNT_SID="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-                   TWILIO_AUTH_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-                   TWILIO_DESTINY_PHONE_NUMBER="+xxxxxxxxxxxxx"
-                   TWILIO_PHONE_NUMBER="+xxxxxxxxxxxxx"
+        [15:13:50]  TWILIO_ACCOUNT_SID="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                    TWILIO_AUTH_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                    TWILIO_DESTINY_PHONE_NUMBER="+xxxxxxxxxxxxx"
+                    TWILIO_PHONE_NUMBER="+xxxxxxxxxxxxx"
         ```
         Para listar uma variável específica:
         ```bash
@@ -372,12 +375,12 @@ def listar(
                 console.log(f'\n{"".join(valores)}\n')
             else:
                 console.log(
-                    f'\nNenhuma variável de ambiente"{option}" encontrada.\n'
+                    f'\nNenhuma variável de ambiente "{option}" encontrada.\n'
                     f'Para cadastrar tente:'
                     f'\npalmeiras [OPTION] [ARG] ou palmeiras --help\n'
                 )
                 logger.error(
-                    f'Nenhuma variável de ambiente"{option}" encontrada.'
+                    f'Nenhuma variável de ambiente "{option}" encontrada.'
                 )
 
     except IOError:
@@ -414,24 +417,35 @@ def delete(
     option = {
         'destiny-phone': 'TWILIO_DESTINY_PHONE_NUMBER',
         'sid': 'TWILIO_ACCOUNT_SID',
-        'twilio_phone': 'TWILIO_PHONE_NUMBER',
+        'twilio-phone': 'TWILIO_PHONE_NUMBER',
         'token': 'TWILIO_AUTH_TOKEN',
     }
-    with open(env, 'r') as file:
-        variaveis = file.readlines()
 
-        for i, item in enumerate(variaveis):
-            if option[variavel] in variaveis[i]:
-                variaveis.remove(item)
-                progress_bar(description='Removendo...')
-                msg_confirm = f'{option[variavel]} removido com sucesso.'
-                console.log(f'{msg_confirm}\n')
-                logger.info(f'{msg_confirm}')
-                with open(env, 'w') as fw:
-                    arquivo = fw.write(''.join(variaveis))
-                return
-        else:
+    with open(env, 'r') as arquivo:
+        variaveis = arquivo.readlines()
+
+        try:
+            for indice, item in enumerate(variaveis):
+                if option[variavel] in variaveis[indice]:
+                    variaveis.remove(item)
+                    progress_bar(description='Removendo...')
+                    msg_confirmacao = (
+                        f'{option[variavel]} removido com sucesso.'
+                    )
+                    console.log(f'{msg_confirmacao}\n')
+                    logger.info(f'{msg_confirmacao}')
+                    with open(env, 'w') as fw:
+                        arquivo = fw.write(''.join(variaveis))
+                    return
+            else:
+                raise KeyError
+
+        except KeyError:
             progress_bar(0, description='[b][red]ERRO!!![/red][/b]')
-            msg_erro = f'O arquivo não contém nenhum {option[variavel]}.'
-            console.log(f'{msg_erro}\n')
+            msg_erro = f'O arquivo não contém nenhum {variavel}.'
+            console.log(
+                f'\n{msg_erro}\n Tente uma dessas {[*option.keys()]}.'
+                'Ou tente um "palmeiras listar" para listar as '
+                'variáveis disponíveis.\n'
+            )
             logger.error(msg_erro)
