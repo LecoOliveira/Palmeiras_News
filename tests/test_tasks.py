@@ -21,8 +21,8 @@ def test_texto_msg_nao_deve_retornar_None():
     assert result is not None
 
 
-def test_texto_msg_deve_retornar_algum_texto():
-    assert isinstance(result, str)
+def test_texto_msg_deve_retornar_algum_texto_em_uma_lista():
+    assert isinstance(result, list)
 
 
 def test_texto_msg_nao_esta_vazio():
@@ -70,4 +70,4 @@ def test_formata_texto_deve_retronar_um_str():
 
 
 def test_formata_texto_deve_retornar_aviso_caso_nao_tenha_dados_do_jogo():
-    assert formata_texto(texto=sem_dados) == sem_dados
+    assert formata_texto(texto=list({sem_dados})) == sem_dados

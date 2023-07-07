@@ -8,35 +8,37 @@ group = Grouper()
 
 
 @group.task(after_success(texto_msg))
-def formata_texto(texto: str = Return(texto_msg)) -> str:
+def formata_texto(texto: list = Return(texto_msg)) -> str:
     """
     Formata o texto vindo da função texto_msg().
 
     Args: Argumentos:
-        texto (str): Texto a ser formatado.
+        texto (list): Texto a ser formatado dentro de uma lista.
 
     Returns: Retorna:
         str: Texto pronto para ser enviado na função enviar_msg().
     """
 
-    if texto != sem_dados:
-        texto = texto.replace('  ', ' ')
-        jogo = texto[: texto.find(' l')]
-        campeonato = texto[texto.find(' l') + 2 : texto.find(')') + 1]
-        data = texto[texto.find('Data') : texto.find('Local')].replace(
-            ' l ', ' '
+    if texto[0] != sem_dados:
+
+        chaves = [
+            texto[i].strip().strip(':')
+            for i in range(len(texto))
+            if i % 2 == 0
+        ]
+
+        valores = [
+            frase.replace(' l ', ' | ').strip(': ')
+            for frase in texto
+            if frase.strip().strip(':') not in chaves
+        ]
+
+        dicionario = dict(zip(chaves, valores))
+
+        return '\n\n'.join(
+            f'{chave}: {dicionario[chave]}' for chave in dicionario.keys()
         )
-        local = texto[texto.find('Local') : texto.find('Trans')]
-        transmissao = texto[texto.find('Trans') : texto.find('Árb')]
-        arbitro = texto[texto.find('Árb') : texto.find('Esca')]
-        escalacao = texto[texto.find('Esca') : texto.find('Pend')]
-        pendurados = texto[texto.find('Pend') : texto.find('Susp')]
-        suspensos = texto[texto.find('Susp') : texto.find('Des')]
-        desfalques = texto[texto.find('Desf') :]
-        return (
-            f'\n{jogo} |{campeonato}\n\n{data}\n'
-            f'{local}\n{transmissao}\n{arbitro}\n\n'
-            f'{escalacao}\n\n{pendurados}\n\n{suspensos}\n\n{desfalques}'
-        )
+
     else:
-        return sem_dados
+
+        return ''.join(texto)

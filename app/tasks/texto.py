@@ -14,7 +14,7 @@ sem_dados = 'Não há relatos sobre este jogo.'
 
 
 @group.task(daily.between(f'{hora_jogo}', f'{hora_max}') & data_igual)
-def texto_msg(link: str = link_jogo) -> str:
+def texto_msg(link: str = link_jogo) -> list:
     """
     Função que faz o web scraping no corpo do site e captura o texto que será enviado na mensagem.
 
@@ -22,16 +22,15 @@ def texto_msg(link: str = link_jogo) -> str:
         link (str): link de onde será buscado o texto. Parâmetro retornado da função link_jogo().
 
     Returns: Retorna:
-        str: Retorna o texto não formatado com os dados da partida.
+        list: Retorna o texto não formatado com os dados da partida em uma lista.
     """
 
-    texto_final = bs((get(link, headers=HEADERS)).content, 'html.parser').find(
+    text_final = bs((get(link, headers=HEADERS)).content, 'html.parser').find(
         'div', {'class': 'pretexto'}
     )
 
-    # if texto_final.text.strip('\n') != sem_dados:
     return (
-        texto_final.find('p').find('p').get_text('\n').replace('\n', ' ')
-        if texto_final.text.strip('\n') != sem_dados
-        else sem_dados
+        list(text_final.p.p.strings)
+        if text_final.text.strip('\n') != sem_dados
+        else list({sem_dados})
     )
