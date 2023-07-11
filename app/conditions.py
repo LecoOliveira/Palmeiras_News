@@ -7,7 +7,7 @@ from app.arguments import data_hoje, data_jogo
 def data_igual(data: str = data_hoje, data_jogo: str = data_jogo) -> bool:
     """
     Função que se torna uma condição através da biblioteca 'Rocketry',
-    a saída dela determina se a próxima função roda ou não dentro das nossas tarefas.
+    a saída dela (True ou False) determina se a função `texto.py` roda ou não dentro das nossas tarefas.
 
     Args:
         data (str): Dia atual. Parâmetro retornado de `data_hoje()`.

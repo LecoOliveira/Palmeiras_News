@@ -22,9 +22,9 @@ def formata_texto(texto: list = Return(texto_msg)) -> str:
     if texto[0] != sem_dados:
 
         chaves = [
-            texto[i].strip().strip(':')
-            for i in range(len(texto))
-            if i % 2 == 0
+            texto[indice].strip().strip(':')
+            for indice in range(len(texto))
+            if not indice % 2
         ]
 
         valores = [

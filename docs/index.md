@@ -18,7 +18,9 @@
 **Código fonte:** <a href="https://github.com/LecoOliveira/Palmeiras_News" target="_blank">https://github.com/LecoOliveira/Palmeiras_News</a>
 
 ---
-Palmeiras news é um projeto para estudo e aprendizado de Python e suas bibliotecas. Esse script realiza uma raspagem (webscraping) no site do Palmeiras, e envia as informações do próximo jogo por SMS utilizando o <a href="https://www.twilio.com/pt-br" target="_blank">Twilio</a>.
+Palmeiras news é um projeto para estudo e aprendizado de Python e suas bibliotecas.
+
+É um script simples que realiza uma raspagem (webscraping) no site do Palmeiras, e envia as informações do próximo jogo por SMS utilizando o <a href="https://www.twilio.com/pt-br" target="_blank">Twilio</a>. Todo o processo é automatizado, ele verifica se o dia atual tem jogo, e se tiver, espera o momento que sai a escalação e envia todos os dados para você.
 
 ---
 ## Instalação

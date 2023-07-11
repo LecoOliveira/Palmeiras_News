@@ -1,8 +1,7 @@
 from bs4 import BeautifulSoup as bs
 from requests import get
 from rocketry import Grouper
-from rocketry.args import Arg, FuncArg, Return
-from rocketry.conds import daily, retry, time_of_day
+from rocketry.conds import daily, retry
 
 from app.arguments import hora_jogo, link_jogo
 from app.conditions import data_igual

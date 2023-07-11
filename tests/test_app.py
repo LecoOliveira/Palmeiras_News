@@ -1,7 +1,5 @@
 from re import compile
 
-from rocketry.conds import false, true
-
 from app.arguments import *
 from app.conditions import data_igual
 

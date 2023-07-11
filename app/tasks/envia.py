@@ -1,7 +1,5 @@
 import logging
-from os import getenv, path
 
-from dotenv import load_dotenv
 from rocketry import Grouper
 from rocketry.args import Return
 from rocketry.conds import after_finish
