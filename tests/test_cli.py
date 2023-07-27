@@ -81,7 +81,7 @@ def test_destiny_phone_formato_invalido():
         app, ['destiny-phone', '--env', 'temp_file.txt', '+551194022']
     )
     assert result.exit_code == 0
-    assert 'O número deve conter' in result.stdout
+    assert 'número deve conter' in result.stdout
 
 
 def test_destiny_phone_cria_arquivo_se_não_existe():
