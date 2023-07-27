@@ -91,7 +91,8 @@ Basta se cadastrar no site oficial, e você terá acesso aos tokens e números n
 Com as credenciais em mãos, é hora de inseri-las no código.
 
 
-É importante manter as credenciais da conta Twilio seguras, armazenando-as de maneira a impedir o acesso não autorizado. Um método comum é armazená-las em variáveis de ambiente que são acessadas no seu aplicativo. Isso os mantém fora do código e de outros lugares onde as credenciais não pertencem.
+É importante manter as credenciais da conta Twilio seguras, armazenando-as de maneira a impedir o acesso não autorizado. Um método comum é armazená-las em variáveis de ambiente que são acessadas no seu aplicativo. Isso os mantém fora do código e de outros lugares onde onde poderiam ser acessadas sem autorização.
+
 Para adicionar as variáveis automaticamente no nosso arquivo, temos os seguintes comandos no CLI do nosso programa que precisarão ser configurados antes de rodar o programa pela primeira vez: ```sid```,  ```token```, ```twilio-phone``` e ```destiny-phone```.
 
 ///warning | Importante
@@ -99,7 +100,7 @@ Você só pode adicionar um SID, um TOKEN e um TWILIO_PHONE, então cuidado ao a
 você pode usar a opção `delete` para deletar e configurar novamente.
 ///
 
-Para configurar a sua credencial (seja ela o `sid`, `token` ou `twilio-phone`) digite no seu terminal o comando `palmeiras` seguindo da credencial que deseja adicionar, como no exemplo á seguir:
+Para configurar a sua credencial (seja ela o `sid`, `token` ou `twilio-phone`) digite no seu terminal o comando `palmeiras` seguindo da credencial que deseja adicionar, como no exemplo a seguir:
 
 <div class="termy">
 
@@ -137,7 +138,7 @@ E sim, para cada número cadastrado, será cobrado pela mensagem enviada. A idei
 ### Listando variáveis
 
 Depois de configuradas suas variáveis de ambiente, você pode visualizá-las para confirmar se foram configuradas de forma correta.
-Para isso use o comando `listar`. Se não passar nenhuma flag será retornado todas as variáveis cadastradas:
+Para isso, use o comando `listar`. Se não passar nenhuma flag será retornado todas as variáveis cadastradas:
 
 <div class="termy">
 
@@ -166,7 +167,7 @@ $ palmeiras listar --sid
 
 ### Deletando variáveis
 
-Caso queira deletar ou reconfigurar alguma variável, você pode usar o comando `delete` seguido pela flag da variável que quer alterar. 
+Caso queira deletar ou reconfigurar alguma variável, você pode usar o comando `delete` seguido pela flag da variável que deseja alterar. 
 Como no exemplo `--twilio-phone`:
 
 <div class="termy">
@@ -182,3 +183,14 @@ $ palmeiras delete --twilio-phone
 ///warning | Cuidado
 O programa precisará de todas as variáveis para funcionar, então não esqueça de cadastrar outra após deletar a anterior.
 ///
+
+---
+
+## Rodando o programa
+
+Depois de cadastrada todas as credenciais, é só rodar o comando no terminal:
+
+``` { .bash .copy }
+palmeiras-run &
+```
+Nosso app ficará rodando em segundo plano, esperando para serem executadas as tasks.
