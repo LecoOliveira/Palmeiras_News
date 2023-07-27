@@ -16,4 +16,4 @@ def data_igual(data: str = data_hoje, data_jogo: str = data_jogo) -> bool:
     Returns:
         bool: True ou False
     """
-    return False if data != data_jogo else True
+    return data == data_jogo

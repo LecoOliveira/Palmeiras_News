@@ -1,13 +1,15 @@
 site_name: Palmeiras news
 
 nav:
-    - Início rápido: index.md
+    - Como usar: index.md
     - Como contribuir: contrib.md
     - API:
         - API/tasks.md
         - API/arguments.md
         - API/conditions.md
-        - API/cli.md
+        - CLI:
+            - Funções de configuração: 'API/cli_config.md'
+            - Comandos: 'API/cli_commands.md'
 
 repo_url: https://github.com/LecoOliveira/Palmeiras_News
 repo_name: LecoOliveira/Palmeiras_News

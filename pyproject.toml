@@ -10,7 +10,7 @@ packages = [
 
 
 [tool.poetry.scripts]
-palmeiras = "app.cli:cli"
+palmeiras = "app.cli.palmeiras:app"
 palmeiras-run = "app.main:app.run()"
 
 
@@ -61,5 +61,14 @@ line_length = 79
 lint = "blue --check --diff . && isort --check --diff ."
 pre_test = "task lint"
 test = "pytest -s -x --cov=. -vv"
-post_test = "coverage html"
+post_test = "coverage html --omit='*/tests*' -d tests/coverage"
 docs = "mkdocs serve"
+
+
+[tool.coverage.run]
+omit = [
+    # Omite a pasta tests
+    "*/tests/*",
+    # Omite qualquer arquivo teste
+    "app/teste.py",
+]
