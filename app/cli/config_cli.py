@@ -91,53 +91,52 @@ def adicionar_phone(chave: str, valor: List[str], env: str):
 
     if encontrado:
         for indice, linha in enumerate(linhas):
-            if chave in linha:
-                linha = linha.rstrip('\n')
-                partes_linha = linha.split('"')
-                phones_agrupados = partes_linha[1]
+            linha = linha.rstrip('\n')
+            partes_linha = linha.split('"')
+            phones_agrupados = partes_linha[1]
 
-                twilio_phones_list = phones_agrupados.split()
+            twilio_phones_list = phones_agrupados.split()
 
-                phones_novos = filter(
-                    lambda phone: phone not in twilio_phones_list,
+            phones_novos = filter(
+                lambda phone: phone not in twilio_phones_list,
+                valor,
+            )
+
+            phones_adicionados = [
+                phone
+                for phone in phones_novos
+                if phone not in twilio_phones_list
+            ]
+
+            if phones_adicionados:
+                phones_agrupados = ' '.join(
+                    twilio_phones_list + phones_adicionados
+                )
+                linha = (
+                    f'{partes_linha[0]}"{phones_agrupados}"'
+                    f'{partes_linha[2]}\n'
+                )
+                linhas[indice] = linha
+
+            list(
+                map(
+                    lambda phone: mensagem_confirmação(phone, chave),
+                    phones_adicionados,
+                )
+            )
+
+            list(
+                map(
+                    lambda phone: mensagem_erro(
+                        phone, twilio_phones_list, phones_adicionados
+                    ),
                     valor,
                 )
+            )
 
-                phones_adicionados = [
-                    phone
-                    for phone in phones_novos
-                    if phone not in twilio_phones_list
-                ]
-
-                if phones_adicionados:
-                    phones_agrupados = ' '.join(
-                        twilio_phones_list + phones_adicionados
-                    )
-                    linha = (
-                        f'{partes_linha[0]}"{phones_agrupados}"'
-                        f'{partes_linha[2]}\n'
-                    )
-                    linhas[indice] = linha
-
-                list(
-                    map(
-                        lambda phone: mensagem_confirmação(phone, chave),
-                        phones_adicionados,
-                    )
-                )
-
-                list(
-                    map(
-                        lambda phone: mensagem_erro(
-                            phone, twilio_phones_list, phones_adicionados
-                        ),
-                        valor,
-                    )
-                )
-
-                with open(env, 'w') as arquivo:
-                    arquivo.writelines(linhas)
-                return
+            with open(env, 'w') as arquivo:
+                arquivo.writelines(linhas)
+            return
 
     with open(env, 'a+') as arquivo:
         arquivo.write(f'{chave}="{" ".join(valor)}"\n')
