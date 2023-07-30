@@ -1,4 +1,5 @@
 import logging
+import logging.config
 
 from rocketry import Grouper
 from rocketry.args import Return
@@ -11,6 +12,7 @@ from app.tasks.formata import formata_texto
 
 group = Grouper()
 CLIENT = Client(ACCOUNT_SID, AUTH_TOKEN)
+logging.config.fileConfig('app/config/logging.conf')
 logger = logging.getLogger('rocketry.task')
 
 

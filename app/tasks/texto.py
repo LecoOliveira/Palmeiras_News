@@ -1,3 +1,5 @@
+import logging.config
+
 from bs4 import BeautifulSoup as bs
 from requests import get
 from rocketry import Grouper
@@ -10,6 +12,7 @@ from app.config.constants import HEADERS
 group = Grouper()
 hora_max = f'{str(int(hora_jogo()[:2]) + 2)}:30'
 sem_dados = 'Não há relatos sobre este jogo.'
+logging.config.fileConfig('app/config/logging.conf')
 
 
 @group.task(daily.between(f'{hora_jogo}', f'{hora_max}') & data_igual)
