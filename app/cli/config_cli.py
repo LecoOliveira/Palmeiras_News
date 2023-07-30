@@ -62,6 +62,12 @@ def adicionar_credencial(chave: str, valor: List[str], env: str):
 
 
 def mensagem_confirmação(phone: str, chave: str):
+    """Função que mostra mensagem de confirmação após configurar telefone.
+
+    Args:
+        phone (str): Telefone que aparecerá na mensagem de confirmação.
+        chave (str): Chave da variável, que se´ra mostrada na mensagem.
+    """
     progress_bar()
     msg_confirmacao = f'{chave} {phone} configurado com sucesso.'
     console.log(f'{msg_confirmacao}\n')
@@ -71,6 +77,13 @@ def mensagem_confirmação(phone: str, chave: str):
 def mensagem_erro(
     phone: str, twilio_phones_list: list, phones_adicionados: list
 ):
+    """Função que mostra mensagem de erro ao configurar destiny-phone.
+
+    Args:
+        phone (str): Telefone que aparecerá na mensagem de erro.
+        twilio_phones_list (list): Lista onde será pego o telefone.
+        phones_adicionados (list): Telefones adicionados.
+    """
     if phone in twilio_phones_list and phone not in phones_adicionados:
         progress_bar(0, description='[b][red]ERRO!!![/red][b]')
         msg_erro = f'O telefone {phone} já existe no arquivo.'
