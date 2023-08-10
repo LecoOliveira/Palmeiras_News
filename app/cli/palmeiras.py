@@ -1,5 +1,4 @@
 import typer
-from typing_extensions import Annotated
 
 from app.cli import (
     config_cli,
