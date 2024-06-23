@@ -10,12 +10,12 @@ from app.conditions import data_igual
 from app.config.constants import HEADERS
 
 group = Grouper()
-hora_max = f'{str(int(hora_jogo()[:2]) + 2)}:30'
+hora_min = f'{str(int(hora_jogo()[:2]) - 1)}:30'
 sem_dados = 'Não há relatos sobre este jogo.'
 logging.config.fileConfig('app/config/logging.conf')
 
 
-@group.task(daily.between(f'{hora_jogo}', f'{hora_max}') & data_igual)
+@group.task(daily.between(f'{hora_min}', f'{hora_jogo}') & data_igual)
 def texto_msg(link: str = link_jogo) -> list:
     """
     Função que faz o web scraping no corpo do site e captura o texto que será enviado na mensagem.

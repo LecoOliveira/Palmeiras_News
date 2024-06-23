@@ -1,14 +1,16 @@
+import cloudscraper
 from datetime import datetime
 from re import compile
 
 from bs4 import BeautifulSoup as bs
-from requests import get
 from rocketry.args import argument
 
 from app.config.constants import HEADERS, URL_PRINCIPAL
 
+scraper = cloudscraper.create_scraper()
+
 html_principal = bs(
-    (get(URL_PRINCIPAL, headers=HEADERS)).content, 'html.parser'
+    (scraper.get(URL_PRINCIPAL, headers=HEADERS)).content, 'html.parser'
 )
 
 
@@ -68,6 +70,7 @@ def hora_jogo() -> str:
         .strip()
         .replace('\n', '')
         .replace('|', '')
+        .replace('H',':')
     )
 
-    return f'{str(int(hora_jogo[:2]) - 2)}:00'
+    return hora_jogo

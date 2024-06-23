@@ -23,6 +23,7 @@ python-dotenv = "^1.0.0"
 rocketry = "^2.5.1"
 typer = "^0.9.0"
 rich = "^13.4.1"
+cloudscraper = "^1.2.71"
 
 
 [tool.poetry.group.dev.dependencies]
