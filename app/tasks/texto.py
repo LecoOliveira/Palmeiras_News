@@ -1,7 +1,7 @@
 import logging.config
 
+import cloudscraper
 from bs4 import BeautifulSoup as bs
-from requests import get
 from rocketry import Grouper
 from rocketry.conds import daily, retry
 
@@ -13,6 +13,7 @@ group = Grouper()
 hora_min = f'{str(int(hora_jogo()[:2]) - 1)}:30'
 sem_dados = 'Não há relatos sobre este jogo.'
 logging.config.fileConfig('app/config/logging.conf')
+scraper = cloudscraper.create_scraper()
 
 
 @group.task(daily.between(f'{hora_min}', f'{hora_jogo}') & data_igual)
@@ -27,9 +28,9 @@ def texto_msg(link: str = link_jogo) -> list:
         list: Retorna o texto não formatado com os dados da partida em uma lista.
     """
 
-    text_final = bs((get(link, headers=HEADERS)).content, 'html.parser').find(
-        'div', {'class': 'pretexto'}
-    )
+    text_final = bs(
+        (scraper.get(link, headers=HEADERS)).content, 'html.parser'
+    ).find('div', {'class': 'pretexto'})
 
     return (
         list(text_final.p.p.strings)

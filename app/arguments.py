@@ -1,7 +1,7 @@
-import cloudscraper
 from datetime import datetime
 from re import compile
 
+import cloudscraper
 from bs4 import BeautifulSoup as bs
 from rocketry.args import argument
 
@@ -70,7 +70,7 @@ def hora_jogo() -> str:
         .strip()
         .replace('\n', '')
         .replace('|', '')
-        .replace('H',':')
+        .replace('H', ':')
     )
 
     return hora_jogo
