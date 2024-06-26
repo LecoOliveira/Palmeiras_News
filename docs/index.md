@@ -20,7 +20,7 @@
 ---
 Palmeiras news é um projeto para estudo e aprendizado de Python e suas bibliotecas.
 
-É um script simples que realiza uma raspagem (webscraping) no site do Palmeiras, e envia as informações do próximo jogo por SMS utilizando o <a href="https://www.twilio.com/pt-br" target="_blank">Twilio</a>. Todo o processo é automatizado, ele verifica se o dia atual tem jogo, e se tiver, espera o momento que sai a escalação e envia todos os dados para você.
+Este projeto consiste em um script automatizado que realiza web scraping no site oficial do Palmeiras para obter informações sobre o próximo jogo do time. Utilizando um bot do Telegram, o script envia essas informações diretamente para os usuários interessados. Todo o processo é totalmente automatizado, incluindo a verificação da data e hora do jogo, armazenamento dos dados e envio das informações via Telegram.
 
 ---
 ## Instalação
@@ -41,8 +41,8 @@ palmeiras-news instalado com sucesso
 ---
 ## Como usar
 
-Esse projeto é um script simples, e faz tudo sozinho depois que é inicializado. As únicas coisas que você vai precisar fazer
-é configurar suas variáveis de ambiente onde serão armazenadas as credenciais da sua conta Twilio.
+Por ser um script simples, e fazer tudo sozinho depois que é inicializado. As únicas coisas que vai precisar fazer
+é configurar suas variáveis de ambiente onde serão armazenadas as credenciais do seu bot do Telegram.
 
 Caso queira pode usar o `--help` para receber uma ajuda rápida:
 
@@ -72,19 +72,35 @@ $ palmeiras --help
 ╰────────────────────────────────────────────────────────────────────────╯
 ```
 </div>
-<center><sup>*Logo de cara, podemos observar todos os comandos de configuração listados na sessão `Commands`*</sup></center>
+<center><sup>*Logo de cara, podemos observar todos os comandos de configuração listados na sessão `Commands`*.</sup></center>
 
 ---
 
 ### Obtendo credenciais
 
-Nesse projeto usamos o [Twilio](https://www.twilio.com/pt-br) para fazer o envio das mensagens.
-Basta se cadastrar no site oficial, e você terá acesso aos tokens e números necessários para a autenticação, podendo assim enviar as mensagens.
+Vamos começar criando o nosso bot. E para que isso, você precisará visitar o [@BotFather](https://telegram.me/BotFather) no Telegram. O processo é bem simples, e você pode ver o tutorial completo [aqui](https://core.telegram.org/bots/features#creating-a-new-bot).
 
-><sub> Obs.: O Twilio é um serviço **pago**, mas disponibilizam um período de testes gratuito. Caso queira continuar após o período, confira a tabala de preços.</sub> 
+<div align="center">
+    <img style="border-radius:10px; box-shadow: 2px 2px 14px #000000;" src="assets/telegram_bot.png" alt="Imagem Telegram">
+</div>
 
-![Imagem Twilio](assets/imagem_twilio.png)
+Depois de dado o comando `/start` no **BotFather**, dê o comando `/newbot`. Então ele pedirá para você escolher um nome para o seu bot. Aqui você pode colocar o nome que preferir.
 
+<div align="center">
+    <img style="border-radius:10px; box-shadow: 2px 2px 14px #000000;" src="assets/bot_father_final.png" alt="Imagem bot">
+</div>
+
+Agora, ele solicitará que você forneça um nome de usuário que obrigatoriamente deve terminar com `bot` e ser único. Portanto, escolha um nome apropriado até que seja aprovado.
+
+<div align="center">
+    <img style="border-radius:10px; box-shadow: 2px 2px 14px #000000;" src="assets/resp_bot.png" alt="Token bot">
+</div>
+
+Pronto! Nosso bot já está criado. Veja que ele já nos retorna o link para acessarmos nosso bot, e também nos fornece o token que vamos utilizar na nossa aplicação.
+Com o bot já criado, acesse o link que o **@BotFather** te deu, e clique em `Start`. 
+
+Repare que nada acontecerá, pois o bot está esperando para receber instruções. E como no nosso caso ele só está lá para receber nossas informações do Palmeiras, está tudo certo.
+Antes de irmos para nossa aplicação de fato, **envie uma mensagem aleatória qualquer para o bot**, só para ter algum registro e podermos capturar o id do seu usuário mais pra frente.
 ---
 ### Configurando variáveis
 
