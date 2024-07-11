@@ -21,13 +21,9 @@ jobs:
         run: touch .env
 
       - name: Setando v-env
-        run: echo TWILIO_AUTH_TOKEN="${{ secrets.TWILIO_AUTH_TOKEN }}" >> .env
+        run: echo BOT_TOKEN="${{ secrets.BOT_TOKEN }}" >> .env
       - name: Setando v-env
-        run: echo TWILIO_ACCOUNT_SID="${{ secrets.TWILIO_ACCOUNT_SID }}" >> .env
-      - name: Setando v-env
-        run: echo TWILIO_DESTINY_PHONE_NUMBER="${{ secrets.TWILIO_DESTINY_PHONE_NUMBER }}" >> .env
-      - name: Setando v-env
-        run: echo TWILIO_PHONE_NUMBER="${{ secrets.TWILIO_PHONE_NUMBER }}" >> .env
+        run: echo BOT_ID="${{ secrets.BOT_ID }}" >> .env
 
       - name: Instalar dependências do projeto
         run: poetry install --without doc --no-ansi
