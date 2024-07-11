@@ -7,9 +7,10 @@ from rocketry.conds import daily, retry
 
 from app.arguments import hora_jogo, link_jogo
 from app.conditions import data_igual
-from app.config.constants import HEADERS
+from app.config.settings import Settings
 
 group = Grouper()
+settings = Settings()
 hora_min = f'{str(int(hora_jogo()[:2]) - 1)}:30'
 sem_dados = 'Não há relatos sobre este jogo.'
 logging.config.fileConfig('app/config/logging.conf')
@@ -29,7 +30,7 @@ def texto_msg(link: str = link_jogo) -> list:
     """
 
     text_final = bs(
-        (scraper.get(link, headers=HEADERS)).content, 'html.parser'
+        (scraper.get(link, headers=settings.HEADERS)).content, 'html.parser'
     ).find('div', {'class': 'pretexto'})
 
     return (

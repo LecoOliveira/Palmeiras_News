@@ -23,7 +23,6 @@ def formata_texto(texto: list = Return(texto_msg)) -> str:
     """
 
     if texto[0] != sem_dados:
-
         chaves = [
             texto[indice].strip().strip(':')
             for indice in range(len(texto))
@@ -42,6 +41,4 @@ def formata_texto(texto: list = Return(texto_msg)) -> str:
             f'{chave}: {dicionario[chave]}' for chave in dicionario.keys()
         )
 
-    else:
-
-        return ''.join(texto)
+    return ''.join(texto)

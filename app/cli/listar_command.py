@@ -5,11 +5,11 @@ import typer
 from rich.console import Console
 from typing_extensions import Annotated
 
-from app.config.constants import ENV
+from app.config.settings import Settings
 
 cli = typer.Typer()
 console = Console()
-
+settings = Settings()
 logging.config.fileConfig('app/config/logging.conf')
 logger = logging.getLogger('rocketry.task')
 
@@ -19,47 +19,24 @@ logger = logging.getLogger('rocketry.task')
     help=('Lista todas as variáveis de ambiente cadastradas'),
 )
 def listar(
-    destiny_phone: Annotated[
+    id: Annotated[
         bool,
         typer.Option(
-            help=(
-                'Lista todos os TWILIO_DESTINY_PHONE_NUMBER cadastrados '
-                'para receber as mensagens;'
-            ),
-            show_default=False,
-        ),
-    ] = False,
-    sid: Annotated[
-        bool,
-        typer.Option(
-            help='Lista o TWILIO_ACCOUNT_SID configurado no arquivo de variável;',
-            show_default=False,
-        ),
-    ] = False,
-    twilio_phone: Annotated[
-        bool,
-        typer.Option(
-            help=(
-                'Lista o TWILIO_PHONE_NUMBER configurado '
-                'no arquivo de variável;'
-            ),
+            help='Lista o BOT_ID configurado no arquivo de variável;',
             show_default=False,
         ),
     ] = False,
     token: Annotated[
         bool,
         typer.Option(
-            help=(
-                'Lista o TWILIO_AUTH_TOKEN configurado no '
-                'arquivo de variável;'
-            ),
+            help='Lista o BOT_TOKEN configurado no arquivo de variável;',
             show_default=False,
         ),
     ] = False,
     env: Annotated[
         str,
         typer.Option(help='Arquivo de onde será lido a variável de ambiente'),
-    ] = ENV,
+    ] = settings.ENV,
 ):
     """
     Lista todas as variáveis de ambiente cadastradas.
@@ -69,34 +46,25 @@ def listar(
         ```bash
         $ palmeiras listar
 
-        [15:13:50]  TWILIO_ACCOUNT_SID="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-                    TWILIO_AUTH_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-                    TWILIO_DESTINY_PHONE_NUMBER="+xxxxxxxxxxxxx"
-                    TWILIO_PHONE_NUMBER="+xxxxxxxxxxxxx"
+        [15:13:50]  BOT_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                    BOT_ID="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         ```
         Para listar uma variável específica:
         ```bash
-        $ palmeiras listar --sid
+        $ palmeiras listar --token
 
-        [11:41:16] TWILIO_ACCOUNT_SID="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        [11:41:16] BOT_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         ```
 
-    Opções: `--token, --destiny-phone, --sid, --twilio-phone`
+    Opções: `--token, --id`
 
     Args: Argumentos:
-        destiny_phone (bool): Lista todos os números cadastrados para receber as mensagens.
-        sid (bool): Lista o SID configurado no arquivo de variável.
-        twilio_phone (bool): Lista o TWILIO_PHONE_NUMBER configurado no arquivo de variável.
         token (bool): Lista o TWILIO_AUTH_TOKEN configurado no arquivo de variável.
+        id (bool): Lista o SID configurado no arquivo de variável.
         env (str): Arquivo de onde buscar as variáveis.
     """
 
-    option = {
-        destiny_phone: 'TWILIO_DESTINY_PHONE_NUMBER',
-        sid: 'TWILIO_ACCOUNT_SID',
-        twilio_phone: 'TWILIO_PHONE_NUMBER',
-        token: 'TWILIO_AUTH_TOKEN',
-    }.get(True, None)
+    option = {id: 'BOT_ID', token: 'BOT_TOKEN'}.get(True, None)
 
     if option is None:
         try:

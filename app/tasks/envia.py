@@ -1,40 +1,34 @@
+import asyncio
 import logging
 import logging.config
 
+import telegram
 from rocketry import Grouper
 from rocketry.args import Return
 from rocketry.conds import after_finish
-from twilio.base.exceptions import TwilioRestException
-from twilio.rest import Client
 
-from app.config.twilio import ACCOUNT_SID, AUTH_TOKEN, PHONE_NUMBER, phones
+from app.config.settings import BotSettings
 from app.tasks.formata import formata_texto
 
-group = Grouper()
-CLIENT = Client(ACCOUNT_SID, AUTH_TOKEN)
+group = Grouper(execution='async')
+settings = BotSettings()
 logger = logging.getLogger('rocketry.task')
 logging.config.fileConfig('app/config/logging.conf')
 
 
 @group.task(after_finish(formata_texto))
-def enviar_msg(texto: str = Return(formata_texto)) -> str:
+async def enviar_msg(texto: str = Return(formata_texto)) -> None:
     """
     Envia a mensagem para os números configurados no arquivo de variável de ambiente.
 
     Args: Argumentos:
         texto (str): Texto ja formatado e pronto para envio. Texto de retorno da função formata_texto().
-
-    Returns: Retorna:
-        str: Mensagem de confirmação ou de erro.
     """
     try:
-        for destiny_phone in phones:
-            message = CLIENT.messages.create(
-                body=texto, from_=PHONE_NUMBER, to=destiny_phone
-            )
+        bot = telegram.Bot(settings.BOT_TOKEN)
+        async with bot:
+            await bot.send_message(text=texto, chat_id=settings.BOT_ID)
+        logger.info('Mensagem envida.')
 
-    except TwilioRestException as erro:
-        logger.error('Erro ao enviar mensagem! (Unable to create...)')
-        return
-
-    return message.sid
+    except telegram.error.TelegramError as erro:    # pragma: no cover
+        logger.error(f'Não foi possível enviar a mensagem: {erro}')

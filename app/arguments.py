@@ -5,12 +5,13 @@ import cloudscraper
 from bs4 import BeautifulSoup as bs
 from rocketry.args import argument
 
-from app.config.constants import HEADERS, URL_PRINCIPAL
+from app.config.settings import Settings
 
 scraper = cloudscraper.create_scraper()
-
+settings = Settings()
 html_principal = bs(
-    (scraper.get(URL_PRINCIPAL, headers=HEADERS)).content, 'html.parser'
+    (scraper.get(settings.URL_PRINCIPAL, headers=settings.HEADERS)).content,
+    'html.parser',
 )
 
 

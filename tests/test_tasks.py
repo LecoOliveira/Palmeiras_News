@@ -1,9 +1,12 @@
 from datetime import datetime
-from unittest import mock
+from unittest.mock import AsyncMock, MagicMock, patch
 
-from twilio.base.exceptions import TwilioRestException
+import pytest
+import telegram
+from telegram.error import TelegramError
 
-from app.tasks.envia import enviar_msg
+from app.config.settings import BotSettings
+from app.tasks.envia import enviar_msg, settings
 from app.tasks.formata import formata_texto
 from app.tasks.texto import sem_dados, texto_msg
 
@@ -31,34 +34,34 @@ def test_texto_msg_nao_esta_vazio():
 # enviar_msg tests -------------------------------------------------
 
 
-@mock.patch('app.tasks.envia.CLIENT.messages.create')
-def test_enviar_msg_esta_funcionando(create_message_mock):
-    expected_sid = 'SM87105da94bff44b999e4e6eb90d8eb6a'
-    create_message_mock.return_value.sid = expected_sid
-    message = create_message_mock
-    sid = enviar_msg()
+# @mock.patch('app.tasks.envia.CLIENT.messages.create')
+# def test_enviar_msg_esta_funcionando(create_message_mock):
+#     expected_sid = 'SM87105da94bff44b999e4e6eb90d8eb6a'
+#     create_message_mock.return_value.sid = expected_sid
+#     message = create_message_mock
+#     sid = enviar_msg()
 
-    assert create_message_mock.called is True
-    assert sid == expected_sid
+#     assert create_message_mock.called is True
+#     assert sid == expected_sid
 
 
-@mock.patch('app.tasks.envia.CLIENT.messages.create')
-def test_enviar_msg_log_error_when_cannot_send_a_message(
-    create_message_mock, caplog
-):
-    error_message = 'Unable to create'
-    status = 500
-    uri = '/Accounts/ACXXXXXXXXXXXXXXXXX/Messages.json'
-    msg = error_message
-    create_message_mock.side_effect = TwilioRestException(
-        status, uri, msg=error_message
-    )
+# @mock.patch('app.tasks.envia.CLIENT.messages.create')
+# def test_enviar_msg_log_error_when_cannot_send_a_message(
+#     create_message_mock, caplog
+# ):
+#     error_message = 'Unable to create'
+#     status = 500
+#     uri = '/Accounts/ACXXXXXXXXXXXXXXXXX/Messages.json'
+#     msg = error_message
+#     create_message_mock.side_effect = TwilioRestException(
+#         status, uri, msg=error_message
+#     )
 
-    sid = enviar_msg('Wrong message')
+#     sid = enviar_msg('Wrong message')
 
-    assert sid is None
-    assert 'Erro ao enviar mensagem' in caplog.text
-    assert error_message in caplog.text
+#     assert sid is None
+#     assert 'Erro ao enviar mensagem' in caplog.text
+#     assert error_message in caplog.text
 
 
 # formata_texto tests ----------------------------------------------
@@ -70,3 +73,18 @@ def test_formata_texto_deve_retronar_um_str():
 
 def test_formata_texto_deve_retornar_aviso_caso_nao_tenha_dados_do_jogo():
     assert formata_texto(texto=list({sem_dados})) == sem_dados
+
+
+@pytest.mark.asyncio
+async def test_enviar_msg():
+    texto_formatado = 'Texto de teste formatado'
+    mock_bot = MagicMock()
+    mock_bot.send_message = AsyncMock()
+
+    telegram.Bot = lambda token: mock_bot
+
+    result = await enviar_msg(texto_formatado)
+
+    mock_bot.send_message.assert_called_once_with(
+        text=texto_formatado, chat_id=settings.BOT_ID
+    )
