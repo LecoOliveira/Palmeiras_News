@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from pydantic import BaseSettings
 
 path = Path.cwd()
+load_dotenv()
 load_dotenv('.env')
 load_dotenv(f'{path}/app/config/config.env')
 
