@@ -3,7 +3,7 @@
         <img class="logo" src="docs/assets/palmeiras_news.png" width="50%">
     </div>
     <p>
-        <em>Receba informações do próximo jogo em seu celular</em>
+        <em>Receba informações do próximo jogo via Telegram Bot</em>
     </p>
         <a href="https://github.com/LecoOliveira/Palmeiras_News/blob/main/LICENSE" target="_blank">
         <img alt="GitHub" src="https://img.shields.io/github/license/LecoOliveira/Palmeiras_news?label=License&logo=gnu&style=plastic&color=dark-green">
@@ -20,12 +20,12 @@
 **Documentação:** <a href="https://palmeiras-news.readthedocs.io/en/latest/" target="_blank">https://palmeiras-news.readthedocs.io/en/latest/</a>
 
 ---
-Palmeiras news é um projeto para estudo e aprendizado de Python e suas bibliotecas. Esse script realiza uma raspagem (webscraping) no site do Palmeiras, e envia as informações do próximo jogo por SMS utilizando o <a href="https://www.twilio.com/pt-br" target="_blank">Twilio</a>.
+Palmeiras news é um projeto para estudo e aprendizado de Python e suas bibliotecas. Esse script realiza uma raspagem (webscraping) no site do Palmeiras, e envia as informações do próximo jogo por mensagem via Bot do Telegram.
 
 ## Instalação
 
 Para fazer a instalação usaremos o pip:
 
 ```bash
-$ pip install palmeiras-news
+pip install palmeiras-news
 ```

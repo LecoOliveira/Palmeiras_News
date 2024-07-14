@@ -51,25 +51,17 @@ Caso queira pode usar o `--help` para receber uma ajuda rápida:
 ```bash
 $ palmeiras --help
 
- Usage: palmeiras [OPTIONS] COMMAND [ARGS]...                             
-                                                                          
- Interface para configuração de variáveis de ambiente que serão usadas no 
- Palmeiras_news.                                                          
-                                                                          
-╭─ Options ──────────────────────────────────────────────────────────────╮
-│ --help                                           Show this message and │
-│                                                  exit.                 │
-╰────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ─────────────────────────────────────────────────────────────╮
-│ delete         Comando que deleta uma variável de ambiente do arquivo. │
-│ destiny-phone  Configura os números para onde serão enviadas as        |
-|                mensagens.                                              │
-│ listar         Lista todas as variáveis de ambiente cadastradas.       │
-│ sid            Configura o TWILIO_ACCOUNT_SID na variável de ambiente. │
-│ token          Configura o TWILI_AUTH_TOKEN na variável de ambiente.   │
-│ twilio-phone   Configura o TWILIO_PHONE_NUMBER na variável de          │
-│                ambiente.                                               │
-╰────────────────────────────────────────────────────────────────────────╯
+ Usage: palmeiras [OPTIONS] COMMAND [ARGS]...
+
+╭─ Options ───────────────────────────────────────────────────────────────────────╮
+│ --help                                                Show this message and     │
+│                                                       exit.                     │
+╰─────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────╮
+│ bot_token    Configura o BOT_TOKEN na variável de ambiente.                     │
+│ delete       Comando que deleta uma variável de ambiente do arquivo.            │
+│ listar       Lista todas as variáveis de ambiente cadastradas                   │
+╰─────────────────────────────────────────────────────────────────────────────────╯
 ```
 </div>
 <center><sup>*Logo de cara, podemos observar todos os comandos de configuração listados na sessão `Commands`*.</sup></center>

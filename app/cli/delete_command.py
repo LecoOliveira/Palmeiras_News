@@ -1,6 +1,3 @@
-import logging
-import logging.config
-
 import typer
 from rich.console import Console
 from typing_extensions import Annotated
@@ -10,8 +7,6 @@ from app.config.settings import Settings
 
 cli = typer.Typer()
 
-logging.config.fileConfig('app/config/logging.conf')
-logger = logging.getLogger('rocketry.task')
 settings = Settings()
 console = Console()
 
@@ -66,10 +61,9 @@ def delete(
 
         except KeyError:
             progress_bar(0, description='[b][red]ERRO!!![/red][/b]')
-            log_mensagem(
-                'erro',
-                f'\nO arquivo não contém nenhum {variavel}.'
+            log_mensagem('erro', f'O arquivo não contém nenhum {variavel}.')
+            console.log(
                 f'\n Tente uma dessas {[*option.keys()]}. '
                 'Ou tente "palmeiras listar" para listar as '
-                'variáveis disponíveis.\n',
+                'variáveis disponíveis.\n'
             )

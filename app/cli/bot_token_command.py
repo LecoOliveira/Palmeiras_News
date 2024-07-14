@@ -50,7 +50,7 @@ def bot_token(
     Comando: `palmeiras bot_token YOUR_BOT_TOKEN`
 
     Args: Argumentos:
-        sid (str): Seu TOKEN gerado ao criar o bot no Bot_Father.
+        token (str): Seu TOKEN gerado ao criar o bot no Bot_Father.
         env (str): Arquivo que será armazenada a variável de ambiente.
     """
     adicionar_credencial('BOT_TOKEN', token, env)

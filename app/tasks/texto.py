@@ -13,8 +13,8 @@ group = Grouper()
 settings = Settings()
 hora_min = f'{str(int(hora_jogo()[:2]) - 1)}:30'
 sem_dados = 'Não há relatos sobre este jogo.'
-logging.config.fileConfig('app/config/logging.conf')
 scraper = cloudscraper.create_scraper()
+logging.config.fileConfig('app/config/logging.conf')
 
 
 @group.task(daily.between(f'{hora_min}', f'{hora_jogo}') & data_igual)

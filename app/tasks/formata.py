@@ -1,5 +1,3 @@
-import logging.config
-
 from rocketry import Grouper
 from rocketry.args import Return
 from rocketry.conds import after_success
@@ -7,7 +5,6 @@ from rocketry.conds import after_success
 from app.tasks.texto import sem_dados, texto_msg
 
 group = Grouper()
-logging.config.fileConfig('app/config/logging.conf')
 
 
 @group.task(after_success(texto_msg))

@@ -1,5 +1,4 @@
 import logging
-import logging.config
 import os
 import time
 from typing import List
@@ -9,8 +8,6 @@ from rich.progress import track
 
 from app.config.settings import Settings
 
-logging.config.fileConfig('app/config/logging.conf')
-logger = logging.getLogger('rocketry.task')
 settings = Settings()
 console = Console()
 
@@ -59,9 +56,9 @@ def log_mensagem(tipo: str, mensagem: str) -> None:
 
     match tipo:
         case 'info':
-            logger.info(mensagem)
+            logging.info(mensagem)
         case 'erro':
-            logger.error(mensagem)
+            logging.error(mensagem)
 
 
 def adicionar_credencial(chave: str, valor: List[str], env: str) -> None:
@@ -81,4 +78,4 @@ def adicionar_credencial(chave: str, valor: List[str], env: str) -> None:
             log_mensagem('info', f'{chave} configurada com sucesso.')
 
     progress_bar(0, description='[b][red]ERRO!!![/red][b]')
-    log_mensagem('erro', 'f{chave} já existe no arquivo.')
+    log_mensagem('erro', f'{chave} já existe no arquivo.')

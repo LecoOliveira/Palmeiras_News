@@ -1,5 +1,4 @@
 import logging
-import logging.config
 
 import typer
 from rich.console import Console
@@ -10,8 +9,6 @@ from app.config.settings import Settings
 cli = typer.Typer()
 console = Console()
 settings = Settings()
-logging.config.fileConfig('app/config/logging.conf')
-logger = logging.getLogger('rocketry.task')
 
 
 @cli.callback(
@@ -78,7 +75,7 @@ def listar(
                 'Tente sem o "--env", ou rode "palmeiras listar '
                 '--help" para obter ajuda.\n'
             )
-            logger.error(f'Nenhum arquivo {env} encontrado.')
+            logging.error(f'Nenhum arquivo {env} encontrado.')
             return
 
     try:
@@ -93,7 +90,7 @@ def listar(
                     f'Para cadastrar tente:'
                     f'\npalmeiras [OPTION] [ARG] ou palmeiras --help\n'
                 )
-                logger.error(
+                logging.error(
                     f'Nenhuma variável de ambiente "{option}" encontrada.'
                 )
 
@@ -102,4 +99,4 @@ def listar(
             '\nErro ao ler o arquivo. Você deve configurar alguma '
             'variável antes de tentar listá-las\n'
         )
-        logger.warning(f'Erro ao ler o arquivo.')
+        logging.warning(f'Erro ao ler o arquivo.')

@@ -1,6 +1,5 @@
 import asyncio
 import logging
-import logging.config
 
 import telegram
 from rocketry import Grouper
@@ -12,8 +11,6 @@ from app.tasks.formata import formata_texto
 
 group = Grouper(execution='async')
 settings = BotSettings()
-logger = logging.getLogger('rocketry.task')
-logging.config.fileConfig('app/config/logging.conf')
 
 
 @group.task(after_finish(formata_texto))
@@ -28,7 +25,6 @@ async def enviar_msg(texto: str = Return(formata_texto)) -> None:
         bot = telegram.Bot(settings.BOT_TOKEN)
         async with bot:
             await bot.send_message(text=texto, chat_id=settings.BOT_ID)
-        logger.info('Mensagem envida.')
 
     except telegram.error.TelegramError as erro:    # pragma: no cover
-        logger.error(f'Não foi possível enviar a mensagem: {erro}')
+        logging.error(f'Não foi possível enviar a mensagem: {erro}')
